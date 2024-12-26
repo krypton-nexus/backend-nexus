@@ -1,0 +1,12 @@
+sudo supervisorctl restart gunicorn
+sudo supervisorctl status gunicorn
+sudo tail -n 50 /var/log/supervisor/supervisord.log
+sudo nano /etc/supervisor/conf.d/gunicorn.conf
+sudo nano /etc/supervisor/conf.d/gunicorn.conf
+command=/home/ubuntu/nexus/backend/venv/bin/gunicorn -w 4 -b 0.0.0.0:5000 app:app
+directory=/home/ubuntu/nexus/backend
+user=ubuntu
+autostart=true
+autorestart=true
+stderr_logfile=/home/ubuntu/nexus/backend/logs/gunicorn.err.log
+stdout_logfile=/home/ubuntu/nexus/backend/logs/gunicorn.out.log
