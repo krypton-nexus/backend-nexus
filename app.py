@@ -9,16 +9,8 @@ from routes.admin_routes import admin_bp
 from flask_cors import CORS
 from routes.membership_routes import membership_bp
 from routes.notification_admin_routes import notification_admin_bp
-# app = Flask(__name__)
-# CORS(app)
-# SECRET_KEY for encoding JWT tokens
-SECRET_KEY = "a3c4b8f7e9d2a10d8b4f4e5c6b7d1c2a7f9e3b6a4d8c5e7f9a3d4b6e8c7a2d1"
-
-# Flask app initialization
 app = Flask(__name__)
-app.config['JWT_SECRET_KEY'] = SECRET_KEY  # Configuring JWT secret key
-
-# Enable CORS for the app
+CORS(app)
 # Register Blueprints
 app.register_blueprint(student_bp, url_prefix='/student')
 app.register_blueprint(auth_bp, url_prefix='/auth')

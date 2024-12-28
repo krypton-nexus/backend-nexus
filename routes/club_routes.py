@@ -16,7 +16,7 @@ def get_club(club_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@jwt_required()
+
 @club_bp.route('/list', methods=['GET'])
 def list_clubs():
     """

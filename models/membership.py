@@ -14,13 +14,14 @@ def add_membership(student_email, club_id):
 
             # Check if the membership already exists for this student and club
             check_membership_query = """
-            SELECT COUNT(*) FROM membership WHERE student_email = %s AND club_id = %s;
+            SELECT status FROM membership WHERE student_email = %s AND club_id = %s;
             """
             cursor.execute(check_membership_query, (student_email, club_id))
-            membership_exists = cursor.fetchone()[0]
+            membership_exists = cursor.fetchone()
 
-            if membership_exists > 0:
-                return {"message": "Student is already a member of this club."}
+            if membership_exists:
+                current_status = membership_exists[0]  # status is the 3rd column
+                return {"message": f"Current status: {current_status}"}
             
             # SQL query to insert the membership record with default status 'pending'
             insert_query = """
@@ -30,7 +31,7 @@ def add_membership(student_email, club_id):
             cursor.execute(insert_query, (student_email, club_id))
             connection.commit()
 
-            return {"message": "Membership added successfully, default status is 'pending'."}
+            return {"message": "Membership added successfully, current status is 'pending'."}
         
         except Exception as e:
             connection.rollback()
