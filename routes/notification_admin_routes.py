@@ -28,7 +28,7 @@ def add_notification():
 
 
 @notification_admin_bp.route('/unread', methods=['GET'])
-def get_unread_notifications():
+def get_unread_admin_notifications():
     """
     Endpoint to get all unread notifications for an admin.
     Expects `admin_email` as a query parameter.
@@ -47,7 +47,7 @@ def get_unread_notifications():
 
 
 @notification_admin_bp.route('/all', methods=['GET'])
-def get_all_notifications():
+def get_all_admin_notifications():
     """
     Endpoint to retrieve all notifications (read and unread) for an admin.
     Expects `admin_email` as a query parameter.
@@ -66,7 +66,7 @@ def get_all_notifications():
 
 
 @notification_admin_bp.route('/unread/count', methods=['GET'])
-def get_unread_count():
+def get_unread_admin_notification_count():
     """
     Endpoint to get the count of unread notifications for an admin.
     Expects `admin_email` as a query parameter.
@@ -83,7 +83,7 @@ def get_unread_count():
 
 
 @notification_admin_bp.route('/read', methods=['GET'])
-def get_read_notifications():
+def get_read_admin_notifications():
     """
     Endpoint to retrieve all read notifications for a specific admin.
     Expects `admin_email` as a query parameter.
