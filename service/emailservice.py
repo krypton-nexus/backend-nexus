@@ -41,7 +41,7 @@ def send_verification_email(email, name):
     try:
         # Generate the verification token
         token = generate_verification_token(email)
-        verification_url = f"http://13.232.48.203:5000/auth/verify/{token}"  # Replace with your domain or IP
+        verification_url = f"http://43.205.202.255:5000/auth/verify/{token}"  # Replace with your domain or IP
 
         msg = Message(
             subject="Verify Your Email",
@@ -64,5 +64,29 @@ def send_verification_email(email, name):
         print(f"Error sending email: {e}")
 
 
+def send_admin_notification(email, member_name, club_id):
+    """
+    Sends an email notification to the admin when a student requests membership to a club.
+    :param email: Admin's email address.
+    :param member_name: Name of the student requesting membership.
+    :param club_id: Club ID for which the membership is requested.
+    """
+    try:
+        msg = Message(
+            subject="New Membership Request",
+            sender=MAIL_USERNAME,
+            recipients=[email],
+            body=(
+                f"Hi Admin,\n\n"
+                f"A new membership request has been made by {member_name} for Club ID: {club_id}.\n\n"
+                f"Please log in to the dashboard to take appropriate action.\n\n"
+                f"Thank you!"
+            )
+        )
 
-
+        # Use the local service app's app context to send the email
+        with service_app.app_context():
+            mail.send(msg)
+        print(f"Notification email sent to admin: {email}.")
+    except Exception as e:
+        print(f"Error sending email to admin: {e}")

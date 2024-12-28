@@ -1,5 +1,6 @@
 from connection import get_connection
-
+from models.admin import list_admins_by_club_id
+from service.emailservice import send_admin_notification
 def add_membership(student_email, club_id):
     """
     Adds a new membership for a student to a club, setting the default status to 'pending' for the first time.
@@ -30,6 +31,11 @@ def add_membership(student_email, club_id):
             """
             cursor.execute(insert_query, (student_email, club_id))
             connection.commit()
+            admins = list_admins_by_club_id(club_id)
+            if isinstance(admins, list):
+                for admin in admins:
+                    admin_email = admin.get("email")
+                    send_admin_notification(admin_email, student_email, club_id)
 
             return {"message": "Membership added successfully, current status is 'pending'."}
         

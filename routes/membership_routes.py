@@ -5,8 +5,9 @@ from JWT.jwt_require import jwt_required
 membership_bp = Blueprint('membership', __name__)
 
 # Add membership
-@jwt_required
+
 @membership_bp.route('/add', methods=['POST'])
+@jwt_required
 def add_member():
     """
     Endpoint to add a new membership for a student to a club.
