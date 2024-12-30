@@ -64,6 +64,7 @@ def insert_admin(data):
 def select_admin_by_email(email):
     """
     Retrieves an admin from the database by their email.
+    Excludes the password column from the returned data.
     :param email: Email of the admin to retrieve.
     :return: Dictionary containing admin details or error message.
     """
@@ -76,6 +77,8 @@ def select_admin_by_email(email):
             cursor.execute(select_query, (email,))
             result = cursor.fetchone()
             if result:
+                # Remove the password field before returning
+                result.pop("password", None)
                 return result
             else:
                 return {"error": "Admin not found"}
@@ -85,10 +88,11 @@ def select_admin_by_email(email):
             cursor.close()
             connection.close()
 
-            
+
 def list_admins_by_club_id(club_id):
     """
     Retrieves all admins associated with a specific club ID.
+    Excludes the password column from the returned data.
     :param club_id: ID of the club to filter admins.
     :return: List of dictionaries containing admin details or an error message.
     """
@@ -102,6 +106,9 @@ def list_admins_by_club_id(club_id):
             results = cursor.fetchall()  # Fetch all rows
 
             if results:
+                # Remove the password field from each result
+                for admin in results:
+                    admin.pop("password", None)
                 return results  # Return the list of admin dictionaries
             else:
                 return {"message": "No admins found for the specified club ID"}

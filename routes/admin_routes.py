@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models.admin import insert_admin,select_admin_by_email, list_admins_by_club_id
+from models.admin import insert_admin, select_admin_by_email, list_admins_by_club_id
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -24,12 +24,18 @@ def add_admin():
         return jsonify({"error": str(e)}), 500
 
 @admin_bp.route('/email', methods=['GET'])
-def get_admin(email):
+def get_admin():
     """
-    Endpoint to retrieve an admin by their ID.
+    Endpoint to retrieve an admin by their email.
+    Expects query parameter: ?email=<email>
     """
     try:
-        result =  select_admin_by_email(email)
+        email = request.args.get('email')  # Retrieve email from query parameters
+        if not email:
+            return jsonify({"error": "Email query parameter is required."}), 400
+
+        # Fetch admin by email
+        result = select_admin_by_email(email)
         if "error" in result:
             return jsonify(result), 404
         return jsonify(result), 200

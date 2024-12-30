@@ -28,7 +28,7 @@ def add_membership(student_email, club_id):
             # SQL query to insert the membership record with default status 'pending'
             insert_query = """
             INSERT INTO membership (student_email, club_id, status)
-            VALUES (%s, %s, 'pending');
+            VALUES (%s, %s, 'Pending');
             """
             cursor.execute(insert_query, (student_email, club_id))
             connection.commit()
