@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models.notification_admin import insert_notification, get_unread_notifications, get_all_notifications, get_unread_count, get_read_notifications
+from models.notification_admin import insert_notification, get_unread_notifications, get_all_notifications, get_unread_count, get_read_notifications,mark_notifications_as_read
 
 notification_admin_bp = Blueprint('notification_admin', __name__)
 
@@ -97,5 +97,30 @@ def get_read_admin_notifications():
         if "message" in result:
             return jsonify(result), 404
         return jsonify({"read_notifications": result}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@notification_admin_bp.route('/mark-as-read', methods=['PATCH'])
+def mark_notifications_as_read_endpoint():
+    """
+    Endpoint to mark notifications as read.
+    Accepts JSON payload with `admin_email` (required) and optional `notification_id`.
+    If `notification_id` is not provided, all unread notifications for the admin will be marked as read.
+    """
+    try:
+        data = request.json
+        if not data or not data.get('admin_email'):
+            return jsonify({"error": "admin_email is required"}), 400
+
+        admin_email = data['admin_email']
+        notification_id = data.get('notification_id')  # Optional
+
+        # Update notifications' read status
+        result = mark_notifications_as_read(admin_email, notification_id)
+        if "error" in result:
+            return jsonify(result), 400
+
+        return jsonify(result), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500

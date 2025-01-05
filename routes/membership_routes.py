@@ -1,13 +1,12 @@
 from flask import Blueprint, request, jsonify
 from models.membership import add_membership, delete_membership,list_all_membership,update_membership_status
-from flask_jwt_extended import jwt_required
 from JWT.jwt_require import jwt_required
 membership_bp = Blueprint('membership', __name__)
 
 # Add membership
 
 @membership_bp.route('/add', methods=['POST'])
-# @jwt_required
+@jwt_required
 def add_member():
     """
     Endpoint to add a new membership for a student to a club.
@@ -29,6 +28,7 @@ def add_member():
 
 # Delete membership
 @membership_bp.route('/delete', methods=['DELETE'])
+@jwt_required
 def delete_member():
     """
     Endpoint to delete a student's membership from a club.
@@ -49,6 +49,7 @@ def delete_member():
         return jsonify({"error": str(e)}), 500
 
 @membership_bp.route('/list', methods=['GET'])
+@jwt_required
 def list_members():
     """
     Endpoint to list all members of a club.
@@ -71,6 +72,7 @@ def list_members():
 
 # Update membership status
 @membership_bp.route('/update/status', methods=['PUT'])
+@jwt_required
 def update_status():
     """
     Endpoint to update the status of a student's membership in a club.
