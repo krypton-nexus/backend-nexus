@@ -9,6 +9,7 @@ from routes.admin_routes import admin_bp
 from flask_cors import CORS
 from routes.membership_routes import membership_bp
 from routes.notification_admin_routes import notification_admin_bp
+from routes.event_routes import event_bp
 app = Flask(__name__)
 CORS(app)
 # Register Blueprints
@@ -18,6 +19,7 @@ app.register_blueprint(club_bp, url_prefix='/club')
 app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(membership_bp, url_prefix='/membership')
 app.register_blueprint(notification_admin_bp, url_prefix='/notification_admin')
+app.register_blueprint(event_bp, url_prefix='/event')
 @app.route('/')
 def home():
     return jsonify({"message": "Welcome to the Nexus API"}), 200

@@ -166,4 +166,4 @@ def create_membership_table():
 # create_club_table()
 # create_admin_table()
 #alter_club_table()
-create_membership_table()
+# create_membership_table()
