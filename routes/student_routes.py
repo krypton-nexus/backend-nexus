@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models.student import insert_student, select_student_by_email, list_all_students
+from models.student import insert_student, select_student_by_email, list_all_students ,get_club_ids_by_student_email
 from service.emailservice import send_verification_email
 
 student_bp = Blueprint('student', __name__)
@@ -50,5 +50,22 @@ def list_students():
             return jsonify({"message": result["message"]}), 404
         else:
             return jsonify({"students": result}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@student_bp.route('/clubs/<email>', methods=['GET'])
+def get_student_clubs(email):
+    """
+    Endpoint to retrieve club IDs associated with a student based on their email.
+    """
+    try:
+        # Call the function to get club IDs associated with the student email
+        result = get_club_ids_by_student_email(email)
+        
+        # Check if the result is a list of club IDs or an error message
+        if isinstance(result, list):
+            return jsonify({"clubs": result}), 200
+        else:
+            return jsonify(result), 404  # Error message if no clubs found or membership not approved
     except Exception as e:
         return jsonify({"error": str(e)}), 500

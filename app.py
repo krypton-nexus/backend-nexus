@@ -51,8 +51,8 @@ def generate_response(question, history, max_tokens=1024, temperature=0.7, top_p
     for msg in history:
         role = "user" if msg["sender"] == "user" else "assistant"
         messages.append({"role": role, "content": msg["text"]})
-
-    messages.append({"role": "user", "content": question})
+    messages.append({"role": "system", "content": "Please answer the following question:"})
+    messages.append({"role": "user", "content":f"question is :-  {question}"})
 
     try:
         # Streaming response from Hugging Face
@@ -79,11 +79,13 @@ def chat():
     """
     try:
         # Parse incoming request
-        message = request.form.get("message", "")
-        history = eval(request.form.get("history", "[]"))
+        data = request.get_json()
 
+        # Extract message and history from the data
+        question = data.get("question", "")
+        history = data.get("history", [])
         # Generate chatbot response
-        response = generate_response(message, history)
+        response = generate_response(question, history)
 
         # Format response for streaming
         def stream_response():

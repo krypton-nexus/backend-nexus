@@ -125,3 +125,35 @@ def list_all_students():
         finally:
             cursor.close()
             connection.close()
+
+def get_club_ids_by_student_email(email):
+    """
+    Retrieves the club IDs associated with a student using their email.
+    :param email: Email of the student.
+    :return: List of club IDs or an error message.
+    """
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+
+            # SQL query to retrieve club IDs where the student is approved
+            query = """
+            SELECT c.id 
+            FROM clubs c
+            JOIN membership m ON c.id = m.club_id
+            JOIN student s ON m.student_email = s.email
+            WHERE s.email = %s AND m.status = 'approved';
+            """
+            cursor.execute(query, (email,))
+            club_ids = cursor.fetchall()
+
+            if club_ids:
+                return [club[0] for club in club_ids]  # Return a list of club IDs
+            else:
+                return {"message": "No clubs found or membership not approved."}
+        except Exception as e:
+            return {"error": str(e)}
+        finally:
+            cursor.close()
+            connection.close()
