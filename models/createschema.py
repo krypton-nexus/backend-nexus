@@ -161,6 +161,37 @@ def create_membership_table():
             cursor.close()
             connection.close()
 
+def create_product_table():
+    """
+    Creates the product table to manage products associated with clubs.
+    Includes product name, price, description, image link, associated club ID, and quantity.
+    """
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+            # SQL to create the product table
+            create_table_query = """
+            CREATE TABLE IF NOT EXISTS product (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                product_name VARCHAR(255) NOT NULL,  -- Name of the product
+                product_price DECIMAL(10,2) NOT NULL,  -- Price of the product
+                product_description TEXT,  -- Description of the product
+                product_image_link VARCHAR(500),  -- Image link of the product
+                club_id VARCHAR(15) NOT NULL,  -- Associated club ID
+                product_quantity INT NOT NULL DEFAULT 0,  -- Quantity of the product available
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (club_id) REFERENCES clubs(id) ON DELETE CASCADE
+            );
+            """
+            cursor.execute(create_table_query)
+            print("Table 'product' created successfully or already exists.")
+        except Exception as err:
+            print(f"Error creating table: {err}")
+        finally:
+            cursor.close()
+            connection.close()
+
 
 # Call the function to create the table
 # create_club_table()
