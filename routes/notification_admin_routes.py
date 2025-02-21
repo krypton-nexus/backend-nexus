@@ -1,9 +1,10 @@
 from flask import Blueprint, request, jsonify
 from models.notification_admin import insert_notification, get_unread_notifications, get_all_notifications, get_unread_count, get_read_notifications,mark_notifications_as_read
-
+from JWT.jwt_require import jwt_required
 notification_admin_bp = Blueprint('notification_admin', __name__)
 
 @notification_admin_bp.route('/add', methods=['POST'])
+@jwt_required
 def add_notification():
     """
     Endpoint to add a new notification.
@@ -28,6 +29,7 @@ def add_notification():
 
 
 @notification_admin_bp.route('/unread', methods=['GET'])
+@jwt_required
 def get_unread_admin_notifications():
     """
     Endpoint to get all unread notifications for an admin.
@@ -47,6 +49,7 @@ def get_unread_admin_notifications():
 
 
 @notification_admin_bp.route('/all', methods=['GET'])
+@jwt_required
 def get_all_admin_notifications():
     """
     Endpoint to retrieve all notifications (read and unread) for an admin.
@@ -66,6 +69,7 @@ def get_all_admin_notifications():
 
 
 @notification_admin_bp.route('/unread/count', methods=['GET'])
+@jwt_required
 def get_unread_admin_notification_count():
     """
     Endpoint to get the count of unread notifications for an admin.
@@ -83,6 +87,7 @@ def get_unread_admin_notification_count():
 
 
 @notification_admin_bp.route('/read', methods=['GET'])
+@jwt_required
 def get_read_admin_notifications():
     """
     Endpoint to retrieve all read notifications for a specific admin.
@@ -102,6 +107,7 @@ def get_read_admin_notifications():
 
 
 @notification_admin_bp.route('/mark-as-read', methods=['PATCH'])
+@jwt_required
 def mark_notifications_as_read_endpoint():
     """
     Endpoint to mark notifications as read.
