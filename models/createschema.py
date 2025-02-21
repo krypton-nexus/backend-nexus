@@ -180,6 +180,7 @@ def create_product_table():
                 product_image_link VARCHAR(500),  -- Image link of the product
                 club_id VARCHAR(15) NOT NULL,  -- Associated club ID
                 product_quantity INT NOT NULL DEFAULT 0,  -- Quantity of the product available
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (club_id) REFERENCES clubs(id) ON DELETE CASCADE
             );
             """
