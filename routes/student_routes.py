@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify
 from models.student import insert_student, select_student_by_email, list_all_students ,get_club_ids_by_student_email
 from service.emailservice import send_verification_email
-
 student_bp = Blueprint('student', __name__)
 
 @student_bp.route('/register', methods=['POST'])
