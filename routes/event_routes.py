@@ -1,10 +1,11 @@
 from flask import Blueprint, request, jsonify
 from models.event import insert_event, list_events_by_club, add_participant_to_event,delete_event_by_id,delete_participant_from_event
 from flask_jwt_extended import jwt_required
-
+from JWT.jwt_require import jwt_required
 event_bp = Blueprint('event', __name__)
 
 @event_bp.route('/get_events', methods=['GET'])
+@jwt_required
 def get_events_by_club():
     """
     Endpoint to retrieve all events for a specific club by club ID.
@@ -29,6 +30,7 @@ def get_events_by_club():
 
 
 @event_bp.route('/create', methods=['POST'])
+@jwt_required
 def create_event():
     """
     Endpoint to create a new event for a specific club.
@@ -66,6 +68,7 @@ def create_event():
 
 
 @event_bp.route('/add_participant', methods=['POST'])
+@jwt_required
 def add_event_participant():
     """
     Endpoint to add a participant to an event.
@@ -101,6 +104,7 @@ def add_event_participant():
         return jsonify({"error": str(e)}), 500
 
 @event_bp.route('/delete_participant', methods=['DELETE'])
+@jwt_required
 def delete_participant():
     """
     Endpoint to delete a participant from an event.
@@ -137,6 +141,7 @@ def delete_participant():
 
 
 @event_bp.route('/delete', methods=['DELETE'])
+@jwt_required
 def delete_event():
     """
     Endpoint to delete an event by club ID and event ID.
