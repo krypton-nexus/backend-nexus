@@ -1,9 +1,11 @@
 from flask import Blueprint, request, jsonify
 from models.student import insert_student, select_student_by_email, list_all_students ,get_club_ids_by_student_email
 from service.emailservice import send_verification_email
+from JWT.jwt_require import jwt_required
 student_bp = Blueprint('student', __name__)
 
 @student_bp.route('/register', methods=['POST'])
+@jwt_required
 def add_student():
     """
     Endpoint to add a new student and send a verification email.
@@ -26,6 +28,7 @@ def add_student():
         return jsonify({"error": str(e)}), 500
 
 @student_bp.route('/<email>', methods=['GET'])
+@jwt_required
 def get_student(email):
     """
     Endpoint to retrieve a student by email.
@@ -37,6 +40,7 @@ def get_student(email):
         return jsonify({"error": str(e)}), 500
 
 @student_bp.route('/list', methods=['GET'])
+@jwt_required
 def list_students():
     """
     Endpoint to retrieve a list of all students.
@@ -53,6 +57,7 @@ def list_students():
         return jsonify({"error": str(e)}), 500
 
 @student_bp.route('/clubs/<email>', methods=['GET'])
+@jwt_required
 def get_student_clubs(email):
     """
     Endpoint to retrieve club IDs associated with a student based on their email.
