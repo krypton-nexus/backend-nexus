@@ -88,3 +88,74 @@ def get_product_by_id(product_id):
         finally:
             cursor.close()
             connection.close()
+
+#update product
+def update_product(product_id, product_name, product_price, product_description, product_image_link, product_quantity):
+    """
+    Updates the details of an existing product.
+    :param product_id: ID of the product to update.
+    :param product_name: Updated product name.
+    :param product_price: Updated price.
+    :param product_description: Updated description.
+    :param product_image_link: Updated image link.
+    :param product_quantity: Updated quantity.
+    :return: Result message.
+    """
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+
+            update_query = """
+            UPDATE product 
+            SET product_name = %s, product_price = %s, product_description = %s, 
+                product_image_link = %s, product_quantity = %s 
+            WHERE id = %s;
+            """
+            cursor.execute(update_query, (product_name, product_price, product_description,
+                                          product_image_link, product_quantity, product_id))
+
+            connection.commit()
+
+            if cursor.rowcount == 0:
+                return {"error": "Product not found"}
+
+            return {"message": "Product updated successfully"}
+
+        except Exception as e:
+            connection.rollback()
+            return {"error": str(e)}
+
+        finally:
+            cursor.close()
+            connection.close()
+
+#delete product 
+def delete_product(product_id):
+    """
+    Deletes a product by ID.
+    :param product_id: ID of the product to delete.
+    :return: Result message.
+    """
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+
+            delete_query = "DELETE FROM product WHERE id = %s;"
+            cursor.execute(delete_query, (product_id,))
+
+            connection.commit()
+
+            if cursor.rowcount == 0:
+                return {"error": "Product not found"}
+
+            return {"message": "Product deleted successfully"}
+
+        except Exception as e:
+            connection.rollback()
+            return {"error": str(e)}
+
+        finally:
+            cursor.close()
+            connection.close()
