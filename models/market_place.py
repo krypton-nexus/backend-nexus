@@ -159,3 +159,56 @@ def delete_product(product_id):
         finally:
             cursor.close()
             connection.close()
+#place order
+def place_order(user_id, product_id, quantity):
+    """
+    Places an order for a product.
+    :param user_id: ID of the user placing the order.
+    :param product_id: ID of the product.
+    :param quantity: Quantity of the product to order.
+    :return: Order confirmation.
+    """
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+
+            insert_query = """
+            INSERT INTO orders (user_id, product_id, quantity, status) 
+            VALUES (%s, %s, %s, 'Pending');
+            """
+            cursor.execute(insert_query, (user_id, product_id, quantity))
+
+            connection.commit()
+            return {"message": "Order placed successfully"}
+
+        except Exception as e:
+            connection.rollback()
+            return {"error": str(e)}
+
+        finally:
+            cursor.close()
+            connection.close()
+#get all orders
+def get_all_orders():
+    """
+    Retrieves all orders placed in the marketplace.
+    :return: List of orders.
+    """
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+
+            select_query = "SELECT * FROM orders;"
+            cursor.execute(select_query)
+            orders = cursor.fetchall()
+
+            return orders
+
+        except Exception as e:
+            return {"error": str(e)}
+
+        finally:
+            cursor.close()
+            connection.close()
