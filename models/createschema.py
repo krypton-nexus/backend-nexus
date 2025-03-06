@@ -191,10 +191,43 @@ def create_product_table():
         finally:
             cursor.close()
             connection.close()
+def create_admin_notification_table():
+    """Creates the notification_admin table with Sri Lanka local time for timestamps."""
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
 
+            # SQL query to create the table
+            create_table_query = """
+            CREATE TABLE IF NOT EXISTS notification_admin (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                admin_email VARCHAR(255) NOT NULL,
+                notification TEXT NOT NULL,
+                is_read BOOLEAN DEFAULT FALSE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
+                FOREIGN KEY (admin_email) REFERENCES admins(email) ON DELETE CASCADE
+            );
+            """
+
+            # Execute query
+            cursor.execute(create_table_query)
+            connection.commit()
+            print("Table 'notification_admin' created successfully.")
+
+        except Exception as e:
+            connection.rollback()
+            print(f"Error creating table: {e}")
+
+        finally:
+            cursor.close()
+            connection.close()
 
 # Call the function to create the table
-# create_club_table()
-# create_admin_table()
+#create_student_table()
+#create_club_table()
+#create_admin_table()
 #alter_club_table()
-# create_membership_table()
+#create_membership_table()
+#create_admin_notification_table()

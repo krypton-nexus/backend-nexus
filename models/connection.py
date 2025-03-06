@@ -4,9 +4,9 @@ def get_connection():
     try:
         # Establish a connection to the MySQL database
         connection = mysql.connector.connect(
-            host="nexus-rds.c9uea0aiebch.ap-south-1.rds.amazonaws.com",
+            host="database-1.c9uea0aiebch.ap-south-1.rds.amazonaws.com",
             user="admin",
-            password="ecfsvKcf0SxtSR3nJfzS",
+            password="Nexus#2024",
             database="nexus"
         )
         print("Database connection successful")
