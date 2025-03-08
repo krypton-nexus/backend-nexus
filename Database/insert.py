@@ -204,14 +204,14 @@ def insert_event(data):
             connection.close()
 
 event_1 = {
-    "event_name": "The Annual General Meeting ",
-    "event_date": "2025-04-25",
-    "event_time": "16:00",
+    "event_name": "Weekly educational meetings",
+    "event_date": "2025-04-15",
+    "event_time": "10:00",
     "venue": "G3 Hall, Faculty of Commerce and Management Studies, University of Kelaniya.",
     "mode": "physical",
-    "event_description": "The Annual General Meeting of the University of Kelaniya Gavel Club was held on the 1st of September 2022 at the G3 Hall, Faculty of Commerce and Management Studies, University of Kelaniya. The Executive Committee for the Academic Year 2020/21 was officially elected at this occasion. The meeting was graced by the Senior Treasurer of the Club, Dr. Jehan Senevirathne. The proceedings started off with the speech of the outgoing President, Gav. Sakuni Thilakarathne, followed by the presentation of Annual Report and Financial Accounts for the Academic Year 2019/20 by the outgoing Vice President - Education, Gav. Savini Samarasinghe and the outgoing Junior Treasurer, Gav. Praveen Bhawantha respectively.",
+    "event_description": "Educational meetings are of high significance in the Gavel club as they nurture speakers to be better versions of themselves in public speaking. The gavel club of the University of Kelaniya has weekly educational meetings on a preferable day for gavel members. Usually, weekly educational meetings are held on Fridays from 5.00 pm to 7.00 pm. The traditional physical educational meetings have transformed into virtual meetings hosted via the Zoom platform. Each educational meeting has a theme dedicated for the meeting which is set by the Toastmaster of the Day and role players like timer, ah counter, grammarian, table topics master, table topics evaluator performs their defined tasks.",
     "participant_count": 0,
-    "images": ["https://nexus-se-bucket.s3.ap-south-1.amazonaws.com/Gavel/Event/Gavelevent1.jpg"],
+    "images": ["https://nexus-se-bucket.s3.ap-south-1.amazonaws.com/Gavel/Event/Gavelevent3.jpg"],
     "club_id": 'club_gavel' # Adjust club_id as needed
 }
 insert_event(event_1)
