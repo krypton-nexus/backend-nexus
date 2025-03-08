@@ -1,4 +1,4 @@
-from connection import get_connection
+from Database.connection import get_connection
 from flask_bcrypt import Bcrypt
 
 bcrypt = Bcrypt()  # Initialize Bcrypt for password hashing

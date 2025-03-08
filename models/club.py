@@ -1,4 +1,4 @@
-from connection import get_connection
+from Database.connection import get_connection
 import json  # To handle JSON serialization
 
 def insert_club(data):
