@@ -1,6 +1,8 @@
 import json
 from connection import get_connection
 from flask_bcrypt import Bcrypt
+
+
 def insert_club(data):
     """
     Inserts a new club into the database.
@@ -162,7 +164,54 @@ admins = [
     }
 ]
 
-# Execute insert function for both admins
-for admin in admins:
-    result = insert_admin(admin)
-    print(result)
+def insert_event(data):
+    """
+    Inserts a new event into the database.
+    :param data: Dictionary containing event details.
+    :return: Result message.
+    """
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+
+            # SQL query to insert event data
+            insert_query = """
+            INSERT INTO event_management (event_name, event_date, event_time, venue, mode, event_description, participant_count, images, club_id)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
+            """
+            cursor.execute(insert_query, (
+                data['event_name'],               # Event Name
+                data['event_date'],               # Event Date
+                data['event_time'],               # Event Time
+                data['venue'],                    # Venue
+                data['mode'],                     # Mode (online or physical)
+                data['event_description'],        # Event Description
+                data['participant_count'],        # Participant Count
+                json.dumps(data.get('images', {})),  # Images JSON (default to empty dict)
+                data['club_id']                   # Club ID (Foreign Key)
+            ))
+
+            connection.commit()
+            return {"message": "Event inserted successfully"}
+
+        except Exception as e:
+            connection.rollback()
+            return {"error": str(e)}
+
+        finally:
+            cursor.close()
+            connection.close()
+
+event_1 = {
+    "event_name": "The Annual General Meeting ",
+    "event_date": "2025-04-25",
+    "event_time": "16:00",
+    "venue": "G3 Hall, Faculty of Commerce and Management Studies, University of Kelaniya.",
+    "mode": "physical",
+    "event_description": "The Annual General Meeting of the University of Kelaniya Gavel Club was held on the 1st of September 2022 at the G3 Hall, Faculty of Commerce and Management Studies, University of Kelaniya. The Executive Committee for the Academic Year 2020/21 was officially elected at this occasion. The meeting was graced by the Senior Treasurer of the Club, Dr. Jehan Senevirathne. The proceedings started off with the speech of the outgoing President, Gav. Sakuni Thilakarathne, followed by the presentation of Annual Report and Financial Accounts for the Academic Year 2019/20 by the outgoing Vice President - Education, Gav. Savini Samarasinghe and the outgoing Junior Treasurer, Gav. Praveen Bhawantha respectively.",
+    "participant_count": 0,
+    "images": ["https://nexus-se-bucket.s3.ap-south-1.amazonaws.com/Gavel/Event/Gavelevent1.jpg"],
+    "club_id": 'club_gavel' # Adjust club_id as needed
+}
+insert_event(event_1)
