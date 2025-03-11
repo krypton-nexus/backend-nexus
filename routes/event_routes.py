@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models.event import insert_event, list_events_by_club, add_participant_to_event,delete_event_by_id,delete_participant_from_event
+from models.event import insert_event, list_events_by_club, add_participant_to_event,delete_event_by_id,delete_participant_from_event,get_participant_count
 from flask_jwt_extended import jwt_required
 from JWT.jwt_require import jwt_required
 event_bp = Blueprint('event', __name__)
