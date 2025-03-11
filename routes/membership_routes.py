@@ -6,7 +6,7 @@ membership_bp = Blueprint('membership', __name__)
 # Add membership
 
 @membership_bp.route('/add', methods=['POST'])
-# @jwt_required
+@jwt_required
 def add_member():
     """
     Endpoint to add a new membership for a student to a club.
@@ -28,7 +28,7 @@ def add_member():
 
 # Delete membership
 @membership_bp.route('/delete', methods=['DELETE'])
-# @jwt_required
+@jwt_required
 def delete_member():
     """
     Endpoint to delete a student's membership from a club.
@@ -49,7 +49,7 @@ def delete_member():
         return jsonify({"error": str(e)}), 500
 
 @membership_bp.route('/list', methods=['GET'])
-# @jwt_required
+@jwt_required
 def list_members():
     """
     Endpoint to list all members of a club.

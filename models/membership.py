@@ -16,7 +16,7 @@ def add_membership(student_email, club_id):
 
             # Check if the membership already exists for this student and club
             check_membership_query = """
-            SELECT status FROM membership WHERE student_email = %s AND club_id = %s;
+            SELECT status FROM membership WHERE student_id = %s AND club_id = %s;
             """
             cursor.execute(check_membership_query, (student_email, club_id))
             membership_exists = cursor.fetchone()
@@ -27,7 +27,7 @@ def add_membership(student_email, club_id):
             
             # SQL query to insert the membership record with default status 'pending'
             insert_query = """
-            INSERT INTO membership (student_email, club_id, status)
+            INSERT INTO membership (student_id, club_id, status)
             VALUES (%s, %s, 'Pending');
             """
             cursor.execute(insert_query, (student_email, club_id))
