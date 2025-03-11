@@ -1,4 +1,4 @@
-from connection import get_connection
+from Database.connection import get_connection
 from models.admin import list_admins_by_club_id
 from service.emailservice import send_admin_notification
 from models.notification_admin import  insert_notification

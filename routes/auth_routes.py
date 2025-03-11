@@ -2,7 +2,7 @@ import jwt
 import datetime
 from flask import Blueprint, request, jsonify
 from werkzeug.security import check_password_hash
-from models.connection import get_connection
+from Database.connection import get_connection
 from flask_bcrypt import Bcrypt 
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 auth_bp = Blueprint('auth', __name__)

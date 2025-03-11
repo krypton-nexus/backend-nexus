@@ -5,7 +5,6 @@ from JWT.jwt_require import jwt_required
 student_bp = Blueprint('student', __name__)
 
 @student_bp.route('/register', methods=['POST'])
-@jwt_required
 def add_student():
     """
     Endpoint to add a new student and send a verification email.

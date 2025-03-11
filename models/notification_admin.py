@@ -1,4 +1,4 @@
-from connection import get_connection
+from Database.connection import get_connection
 from datetime import datetime
 def insert_notification(admin_email, notification):
     """
