@@ -174,10 +174,9 @@ def delete_event():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
-@event_bp.route('/get_participant_count', methods=['GET'])
-@jwt_required()
-def get_participant_count():
+@event_bp.route('/get_participant_count', methods=['POST'])
+@jwt_required
+def get_participant_count_route():
     """
     Endpoint to get the participant count for an event.
     Expected JSON format:
@@ -197,8 +196,8 @@ def get_participant_count():
         club_id = data['club_id']
         event_id = data['event_id']
 
-        # Retrieve participant count from the database
-        count = get_participant_count(club_id, event_id)  # Function call to fetch count
+        # Fix: Call the function correctly
+        count = get_participant_count(club_id, event_id)
 
         if isinstance(count, dict) and "error" in count:
             return jsonify(count), 400  # Return error if retrieval fails
