@@ -97,7 +97,7 @@ def update_membership_status(student_email, club_id, status):
 
             # Check if the membership exists for the given student and club
             check_membership_query = """
-            SELECT status FROM membership WHERE student_email = %s AND club_id = %s;
+            SELECT status FROM membership WHERE student_id = %s AND club_id = %s;
             """
             cursor.execute(check_membership_query, (student_email, club_id))
             membership_exists = cursor.fetchone()
@@ -109,7 +109,7 @@ def update_membership_status(student_email, club_id, status):
             update_query = """
             UPDATE membership
             SET status = %s
-            WHERE student_email = %s AND club_id = %s;
+            WHERE student_id = %s AND club_id = %s;
             """
             cursor.execute(update_query, (status, student_email, club_id))
             connection.commit()
@@ -139,7 +139,7 @@ def list_all_membership(club_id):
 
             # SQL query to fetch all memberships for the given club_id, including the created_at field
             select_query = """
-            SELECT student_email, status, created_at FROM membership WHERE club_id = %s;
+            SELECT student_id, status, created_at FROM membership WHERE club_id = %s;
             """
             cursor.execute(select_query, (club_id,))
             memberships = cursor.fetchall()

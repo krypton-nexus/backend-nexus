@@ -142,8 +142,8 @@ def get_club_ids_by_student_email(email):
             SELECT c.id 
             FROM clubs c
             JOIN membership m ON c.id = m.club_id
-            JOIN student s ON m.student_email = s.email
-            WHERE s.email = %s AND m.status = 'approved';
+            JOIN student s ON m.student_id = s.email
+            WHERE s.email = %s AND m.status = 'Approved';
             """
             cursor.execute(query, (email,))
             club_ids = cursor.fetchall()
