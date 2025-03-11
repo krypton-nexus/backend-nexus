@@ -235,3 +235,33 @@ def delete_event_by_id(club_id, event_id):
         finally:
             cursor.close()
             connection.close()
+
+# 6. Retrieve Participant Count for Event
+def get_participant_count(club_id, event_id):
+    """
+    Retrieves the participant count for a specific event.
+    :param club_id: Club ID to ensure the event belongs to the club.
+    :param event_id: Event ID for which participant count is needed.
+    :return: Integer representing participant count or an error message.
+    """
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+
+            # SQL query to get participant count
+            select_query = "SELECT participant_count FROM event_management WHERE club_id = %s AND id = %s;"
+            cursor.execute(select_query, (club_id, event_id))
+            result = cursor.fetchone()
+
+            if not result:
+                return {"error": "Event not found for this club"}
+
+            return result[0]  # Returning participant count as an integer
+
+        except Exception as e:
+            return {"error": str(e)}
+
+        finally:
+            cursor.close()
+            connection.close()
