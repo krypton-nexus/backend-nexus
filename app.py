@@ -13,6 +13,7 @@ from routes.membership_routes import membership_bp
 from routes.notification_admin_routes import notification_admin_bp
 from routes.event_routes import event_bp
 from service.chatbot import chat
+from openai import AzureOpenAI
 app = Flask(__name__)
 CORS(app)
 # Register Blueprints
@@ -24,27 +25,102 @@ app.register_blueprint(membership_bp, url_prefix='/membership')
 app.register_blueprint(notification_admin_bp, url_prefix='/notification_admin')
 app.register_blueprint(event_bp, url_prefix='/event')
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
+# # Configure logging
+# logging.basicConfig(level=logging.INFO)
 
-# Hugging Face Token (Replace with your token)
-HF_TOKEN = "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"
-login(token=HF_TOKEN)
+# # Hugging Face Token (Replace with your token)
+# HF_TOKEN = "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"
+# login(token=HF_TOKEN)
 
-# Hugging Face Inference Client
-client = InferenceClient("Qwen/Qwen2.5-Coder-32B-Instruct")
+# # Hugging Face Inference Client
+# client = InferenceClient("Qwen/Qwen2.5-Coder-32B-Instruct")
+# def generate_response(question, history, max_tokens=1024, temperature=0.7, top_p=0.95):
+#     """
+#     Generate response from Hugging Face model.
+#     """
+#     system_message = (
+#         "You are a helpful assistant. Your name is Kajan. The University of Kelaniya Gavel Club, affiliated to Toastmasters International USA, "
+#         "was chartered in October 2004 and has gained much reputation by becoming the first ever Gavel Club in South Asia. "
+#         "The initial step towards creating the club was taken by a Speechcrafters’ Educational Programme at the university, initiated "
+#         "under the guidance of Mr. Sujith Bandulahewa, the Charter President of Serendib Toastmasters Club, Prof Kapila Seneviratne "
+#         "and Dr. D.U. Mohan. This successful implementation favoured the goals of the educational and career aspirations and therefore "
+#         "gave birth to the Gavel Club of University of Kelaniya on the 21st of October 2004. The club is currently operated under the patronage "
+#         "of Career Guidance Unit of the University of Kelaniya."
+#     )
+
+#     messages = [{"role": "system", "content": system_message}]
+
+#     for msg in history:
+#         role = "user" if msg["sender"] == "user" else "assistant"
+#         messages.append({"role": role, "content": msg["text"]})
+#     messages.append({"role": "system", "content": "Please answer the following question:"})
+#     messages.append({"role": "user", "content":f"question is :-  {question}"})
+
+#     try:
+#         # Streaming response from Hugging Face
+#         def stream():
+#             for chunk in client.chat_completion(
+#                 messages=messages,
+#                 max_tokens=max_tokens,
+#                 temperature=temperature,
+#                 top_p=top_p,
+#                 stream=True,
+#             ):
+#                 yield chunk.choices[0].delta.content
+
+#         return stream()
+#     except Exception as e:
+#         logging.error(f"Error generating response: {e}")
+#         return f"Error: {e}"
+
+
+# @app.route("/chat", methods=["POST"])
+# def chat():
+#     """
+#     Chat endpoint for text input.
+#     """
+#     try:
+#         # Parse incoming request
+#         data = request.get_json()
+
+#         # Extract message and history from the data
+#         question = data.get("question", "")
+#         history = data.get("history", [])
+#         # Generate chatbot response
+#         response = generate_response(question, history)
+
+#         # Format response for streaming
+#         def stream_response():
+#             yield '{"text": "'
+#             for token in response:
+#                 yield token.replace('"', '\\"')  # Escape double quotes for JSON
+#             yield '"}'
+
+#         return Response(stream_response(), content_type="application/json")
+#     except Exception as e:
+#         logging.error(f"Error handling chat request: {e}")
+#         return jsonify({"error": str(e)}), 500
+
+# Azure OpenAI credentials
+AZURE_API_KEY = "0b9c53361dc945f4a866356180073582"
+AZURE_ENDPOINT = "https://iwmi-chat-demo.openai.azure.com/"
+AZURE_API_VERSION = "2024-02-15-preview"
+AZURE_DEPLOYMENT_NAME = "iwmi-gpt-4o"
+
+# Initialize Azure OpenAI client
+client = AzureOpenAI(
+    api_version=AZURE_API_VERSION,
+    api_key=AZURE_API_KEY,
+    azure_endpoint=AZURE_ENDPOINT,
+)
+
 def generate_response(question, history, max_tokens=1024, temperature=0.7, top_p=0.95):
     """
-    Generate response from Hugging Face model.
+    Generate response from Azure OpenAI GPT-4o with streaming.
     """
     system_message = (
-        "You are a helpful assistant. Your name is Kajan. The University of Kelaniya Gavel Club, affiliated to Toastmasters International USA, "
-        "was chartered in October 2004 and has gained much reputation by becoming the first ever Gavel Club in South Asia. "
-        "The initial step towards creating the club was taken by a Speechcrafters’ Educational Programme at the university, initiated "
-        "under the guidance of Mr. Sujith Bandulahewa, the Charter President of Serendib Toastmasters Club, Prof Kapila Seneviratne "
-        "and Dr. D.U. Mohan. This successful implementation favoured the goals of the educational and career aspirations and therefore "
-        "gave birth to the Gavel Club of University of Kelaniya on the 21st of October 2004. The club is currently operated under the patronage "
-        "of Career Guidance Unit of the University of Kelaniya."
+        "You are a helpful assistant. Your name is NexusAssistant. The University of Kelaniya Gavel Club, affiliated to Toastmasters International USA, "
+        "was chartered in October 2004 and has gained much reputation by becoming the first ever Gavel Club in South Asia..."
     )
 
     messages = [{"role": "system", "content": system_message}]
@@ -52,26 +128,29 @@ def generate_response(question, history, max_tokens=1024, temperature=0.7, top_p
     for msg in history:
         role = "user" if msg["sender"] == "user" else "assistant"
         messages.append({"role": role, "content": msg["text"]})
-    messages.append({"role": "system", "content": "Please answer the following question:"})
-    messages.append({"role": "user", "content":f"question is :-  {question}"})
+
+    messages.append({"role": "user", "content": f"Question: {question}"})
 
     try:
-        # Streaming response from Hugging Face
+        # Stream response from Azure OpenAI
         def stream():
-            for chunk in client.chat_completion(
+            response = client.chat.completions.create(
+                model=AZURE_DEPLOYMENT_NAME,
                 messages=messages,
                 max_tokens=max_tokens,
                 temperature=temperature,
                 top_p=top_p,
-                stream=True,
-            ):
-                yield chunk.choices[0].delta.content
+                stream=True,  # Enable streaming
+            )
+            for chunk in response:
+                if chunk.choices:
+                    yield chunk.choices[0].delta.content or ""
 
         return stream()
+
     except Exception as e:
         logging.error(f"Error generating response: {e}")
         return f"Error: {e}"
-
 
 @app.route("/chat", methods=["POST"])
 def chat():
@@ -79,28 +158,23 @@ def chat():
     Chat endpoint for text input.
     """
     try:
-        # Parse incoming request
         data = request.get_json()
-
-        # Extract message and history from the data
         question = data.get("question", "")
         history = data.get("history", [])
-        # Generate chatbot response
-        response = generate_response(question, history)
 
-        # Format response for streaming
+        response_stream = generate_response(question, history)
+
         def stream_response():
             yield '{"text": "'
-            for token in response:
+            for token in response_stream:
                 yield token.replace('"', '\\"')  # Escape double quotes for JSON
             yield '"}'
 
         return Response(stream_response(), content_type="application/json")
+
     except Exception as e:
         logging.error(f"Error handling chat request: {e}")
         return jsonify({"error": str(e)}), 500
-
-
 
 @app.route('/')
 def home():
