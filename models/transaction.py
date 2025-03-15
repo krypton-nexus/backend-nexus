@@ -36,3 +36,55 @@ def insert_transaction(data):
         finally:
             cursor.close()
             connection.close()
+
+def select_transaction_by_id(transaction_id):
+    """
+    Retrieves a financial transaction from the database by its ID.
+    :param transaction_id: ID of the transaction to retrieve.
+    :return: Dictionary containing transaction details or error message.
+    """
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor(dictionary=True)
+            
+            # SQL query to select transaction by ID
+            select_query = "SELECT * FROM transactions WHERE transaction_id = %s;"
+            cursor.execute(select_query, (transaction_id,))
+            result = cursor.fetchone()
+
+            if result:
+                return result
+            else:
+                return {"error": "Transaction not found"}
+        except Exception as e:
+            return {"error": str(e)}
+        finally:
+            cursor.close()
+            connection.close()          
+            
+def list_transactions_by_club(club_id):
+    """
+    Retrieves all financial transactions for a specific club.
+    :param club_id: ID of the club to filter transactions.
+    :return: List of dictionaries containing transaction details or error message.
+    """
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor(dictionary=True)
+
+            # SQL query to select all transactions for a specific club
+            select_query = "SELECT * FROM transactions WHERE club_id = %s;"
+            cursor.execute(select_query, (club_id,))
+            results = cursor.fetchall()
+
+            if results:
+                return results  # Return the list of transaction dictionaries
+            else:
+                return {"message": "No transactions found for this club"}
+        except Exception as e:
+            return {"error": str(e)}
+        finally:
+            cursor.close()
+            connection.close()
