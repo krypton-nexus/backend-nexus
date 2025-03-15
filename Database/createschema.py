@@ -279,3 +279,4 @@ def create_category_table():
 #alter_club_table()
 #create_membership_table()
 #create_admin_notification_table()
+#create_product_table()

@@ -1,7 +1,9 @@
 CREATE TABLE category (
     category_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     transaction_type_id INT NOT NULL,
+    club_id INT NOT NULL,
     category_name VARCHAR(100) NOT NULL,
+    FOREIGN KEY (club_id) REFERENCES clubs(club_id),
     FOREIGN KEY (transaction_type_id) REFERENCES transaction_type(transaction_type_id) ON DELETE CASCADE
 );
 CREATE TABLE transaction_type (

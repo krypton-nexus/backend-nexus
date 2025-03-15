@@ -13,3 +13,4 @@ stdout_logfile=/home/ubuntu/nexus/backend/logs/gunicorn.out.log
 sudo supervisorctl stop gunicorn
 sudo supervisorctl start gunicorn
 git clone --branch kajaluxshan --single-branch https://github.com/krypton-nexus/frontend.git
+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

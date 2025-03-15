@@ -119,8 +119,15 @@ def generate_response(question, history, max_tokens=1024, temperature=0.7, top_p
     Generate response from Azure OpenAI GPT-4o with streaming.
     """
     system_message = (
-        "You are a helpful assistant. Your name is NexusAssistant. The University of Kelaniya Gavel Club, affiliated to Toastmasters International USA, "
-        "was chartered in October 2004 and has gained much reputation by becoming the first ever Gavel Club in South Asia..."
+        """You are a helpful assistant. Your name is NexusAssistant.the currently we focous on university of kelaniya , below the details about club details\n
+SESA Club
+The Software Engineering Students' Association (SESA) is the official student society for Software Engineering undergraduates at the Faculty of Science, University of Kelaniya. It aims to foster both technical and soft skill development among students, promote collaboration, and unite undergraduates through a variety of educational and community-focused initiatives. SESA serves as a platform for members to network, share knowledge, and develop essential professional competencies.
+SESA organizes key events such as RealHack, a hackathon designed to encourage innovation and problem-solving, and Junior Hack, aimed at nurturing the coding skills of junior students. Inceptio celebrates the achievements of final-year undergraduates as they transition to the professional world. Other notable initiatives include Node Fall, an entertainment event for social interaction, and beach cleaning programs promoting environmental responsibility. Additionally, the club conducts outbound training programs to develop leadership and teamwork among students.
+\n
+Gavel Club
+The Gavel Club at the University of Kelaniya, established on October 21, 2004, is the first Gavel Club in South Asia and operates under the patronage of the Career Guidance Unit. Affiliated with Toastmasters International USA, it provides a supportive platform for undergraduates to enhance their public speaking, English language, and leadership skills. The club's vision is to empower members to be recognized as effective communicators with strong personalities, fostering self-confidence and personal growth.
+The club hosts weekly educational meetings where members engage in speaking exercises and receive constructive feedback. Flagship events include the Best Speaker Contest, an inter-university public speaking competition, and the Inter-School Best Speaker Contest, aimed at nurturing young speakers. The Gavel Club also promotes collaboration through joint meetings with other university Gavel Clubs and themed sessions. These initiatives contribute to the development of communication and leadership skills in a dynamic and inclusive environment.
+ """
     )
 
     messages = [{"role": "system", "content": system_message}]
