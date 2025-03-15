@@ -224,6 +224,54 @@ def create_admin_notification_table():
             cursor.close()
             connection.close()
 
+def create_transaction_type_table():
+    """Creates the transaction_type table."""
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+            create_table_query = """
+            CREATE TABLE IF NOT EXISTS transaction_type (
+                transaction_type_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                type_name ENUM('Income', 'Expense') NOT NULL
+            );
+            """
+            cursor.execute(create_table_query)
+            connection.commit()
+            print("Table 'transaction_type' created successfully.")
+        except Exception as e:
+            connection.rollback()
+            print(f"Error creating table 'transaction_type': {e}")
+        finally:
+            cursor.close()
+            connection.close()
+            
+def create_category_table():
+    """Creates the category table."""
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+            create_table_query = """
+            CREATE TABLE IF NOT EXISTS category (
+                category_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                transaction_type_id INT NOT NULL,
+                club_id INT NOT NULL,
+                category_name VARCHAR(100) NOT NULL,
+                FOREIGN KEY (club_id) REFERENCES clubs(club_id),
+                FOREIGN KEY (transaction_type_id) REFERENCES transaction_type(transaction_type_id) ON DELETE CASCADE
+            );
+            """
+            cursor.execute(create_table_query)
+            connection.commit()
+            print("Table 'category' created successfully.")
+        except Exception as e:
+            connection.rollback()
+            print(f"Error creating table 'category': {e}")
+        finally:
+            cursor.close()
+            connection.close()
+
 # Call the function to create the table
 #create_student_table()
 #create_club_table()
