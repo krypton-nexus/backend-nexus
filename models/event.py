@@ -270,3 +270,44 @@ def get_participant_count(club_id, event_id):
         finally:
             cursor.close()
             connection.close()
+
+def edit_event(event_id, data):
+    """
+    Edits an existing event's details in the database.
+    :param event_id: ID of the event to be updated.
+    :param data: Dictionary containing updated event details.
+    :return: Result message.
+    """
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+
+            # SQL query to update event details
+            update_query = """
+            UPDATE event_management
+            SET venue = %s, event_date = %s, event_time = %s, 
+                event_description = %s, mode = %s, category = %s, 
+                meeting_note = %s, images = %s
+            WHERE id = %s;
+            """
+            cursor.execute(update_query, (
+                data['venue'],                # Updated Venue
+                data['event_date'],           # Updated Date
+                data['event_time'],           # Updated Time
+                data['event_description'],    # Updated Description
+                data['mode'],                 # Updated Mode (Online/Physical)
+                data['category']            # Updated Category
+        
+            ))
+
+            connection.commit()
+            return {"message": "Event updated successfully"}
+
+        except Exception as e:
+            connection.rollback()
+            return {"error": str(e)}
+
+        finally:
+            cursor.close()
+            connection.close()

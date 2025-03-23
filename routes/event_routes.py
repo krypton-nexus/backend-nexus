@@ -42,7 +42,10 @@ def create_event():
         "venue": "Event Venue",
         "mode": "online/physical",
         "event_description": "Event description",
-        "images": ["image_url_1", "image_url_2"]
+        "images": ["image_url_1", "image_url_2"],
+        category
+        ispbulic,
+        meeting_note
     }
     """
     try:
@@ -206,3 +209,43 @@ def get_participant_count_route():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500  # Internal server error
+
+@event_bp.route('/edit', methods=['POST'])
+@jwt_required()
+def edit_event_route():
+    """
+    Endpoint to edit an existing event based on event_id.
+    Expected JSON format:
+    {
+        "event_id": "unique_event_id",
+        "event_name": "Updated Event Name",
+        "event_date": "YYYY-MM-DD",
+        "event_time": "HH:MM",
+        "venue": "Updated Venue",
+        "mode": "online/physical",
+        "event_description": "Updated description",
+        "category": "Updated Category",
+        "ispublic": 1 or 0
+    }
+    """
+    try:
+        data = request.get_json()  # Get JSON data from request
+        
+        if not data:
+            return jsonify({"error": "No data provided"}), 400  # Bad request if no data
+        
+        event_id = data.get("event_id")
+        if not event_id:
+            return jsonify({"error": "event_id is required"}), 400
+
+        # Call the edit_event function to update the event
+        result = edit_event(event_id, data)
+
+        # If the result contains an error, return the error message
+        if "error" in result:
+            return jsonify(result), 400  # Bad request if update fails
+        
+        return jsonify(result), 200  # Successfully updated the event
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500 
