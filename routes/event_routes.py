@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models.event import insert_event, list_events_by_club, add_participant_to_event,delete_event_by_id,delete_participant_from_event,get_participant_count
+from models.event import insert_event, list_events_by_club, add_participant_to_event,delete_event_by_id,delete_participant_from_event,get_participant_count,edit_event
 from JWT.jwt_require import jwt_required
 event_bp = Blueprint('event', __name__)
 
@@ -211,7 +211,7 @@ def get_participant_count_route():
         return jsonify({"error": str(e)}), 500  # Internal server error
 
 @event_bp.route('/edit', methods=['POST'])
-@jwt_required()
+@jwt_required
 def edit_event_route():
     """
     Endpoint to edit an existing event based on event_id.
@@ -249,3 +249,46 @@ def edit_event_route():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500 
+
+
+@event_bp.route('/add_meeting_note', methods=['POST'])
+@jwt_required
+def add_meeting_note():
+    """
+    Endpoint to add or update a meeting note for a specific event.
+    Expected JSON format:
+    {
+        "event_id": 1,
+        "meeting_note": "This is the updated meeting note."
+    }
+    """
+    try:
+        data = request.get_json()
+        if not data or 'event_id' not in data or 'meeting_note' not in data:
+            return jsonify({"error": "event_id and meeting_note are required"}), 400
+
+        event_id = data['event_id']
+        meeting_note = data['meeting_note']
+
+        connection = get_connection()
+        if connection:
+            cursor = connection.cursor()
+
+            # Update query
+            update_query = """
+            UPDATE event_management
+            SET meeting_note = %s
+            WHERE id = %s;
+            """
+            cursor.execute(update_query, (meeting_note, event_id))
+            connection.commit()
+
+            return jsonify({"message": "Meeting note updated successfully"}), 200
+
+    except Exception as e:
+        connection.rollback()
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        cursor.close()
+        connection.close()
