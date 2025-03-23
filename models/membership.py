@@ -50,7 +50,7 @@ def add_membership(student_email, club_id):
             cursor.close()
             connection.close()
 
-def delete_membership(student_email, club_id):
+def delete_membership(student_id, club_id):
     """
     Deletes a membership of a student from a club.
     :param student_email: Email of the student whose membership needs to be deleted.
@@ -65,7 +65,7 @@ def delete_membership(student_email, club_id):
             # SQL query to delete the membership record
             delete_query = """
             DELETE FROM membership
-            WHERE student_email = %s AND club_id = %s;
+            WHERE student_id = %s AND club_id = %s;
             """
             cursor.execute(delete_query, (student_email, club_id))
             connection.commit()
