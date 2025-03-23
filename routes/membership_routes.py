@@ -28,7 +28,7 @@ def add_member():
 
 # Delete membership
 @membership_bp.route('/delete', methods=['DELETE'])
-@jwt_required
+# @jwt_required
 def delete_member():
     """
     Endpoint to delete a student's membership from a club.

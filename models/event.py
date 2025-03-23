@@ -30,7 +30,7 @@ def insert_event(data):
 
             # SQL query to insert event data
             insert_query = """
-            INSERT INTO event_management (event_name, event_date, event_time, venue, mode, event_description, participant_count, images, club_id)
+            INSERT INTO event_management (event_name, event_date, event_time, venue, mode, event_description, participant_count, images, club_id,category,ispublic,meeting_note,count_maybe)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
             """
             cursor.execute(insert_query, (
@@ -42,7 +42,12 @@ def insert_event(data):
                 data['event_description'],        # Event Description
                 0,                                # Initial participant count
                 json.dumps(data.get('images', {})),  # Images JSON (default to empty dict)
-                data['club_id']                   # Club ID (Foreign Key)
+                data['club_id'],                 # Club ID (Foreign Key)
+                data['category'],
+                1,
+                data['meeting_note'],
+                0
+
             ))
 
             connection.commit()

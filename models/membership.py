@@ -67,7 +67,7 @@ def delete_membership(student_id, club_id):
             DELETE FROM membership
             WHERE student_id = %s AND club_id = %s;
             """
-            cursor.execute(delete_query, (student_email, club_id))
+            cursor.execute(delete_query, (student_id, club_id))
             connection.commit()
 
             if cursor.rowcount > 0:
