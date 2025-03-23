@@ -32,15 +32,15 @@ def add_member():
 def delete_member():
     """
     Endpoint to delete a student's membership from a club.
-    Expects JSON payload with student_email and club_id.
+    Expects JSON payload with student_id and club_id.
     """
     try:
         data = request.json
-        if not data or 'student_email' not in data or 'club_id' not in data:
+        if not data or 'student_id' not in data or 'club_id' not in data:
             return jsonify({"error": "Invalid input. student_email and club_id are required."}), 400
 
         # Delete the membership
-        result = delete_membership(data['student_email'], data['club_id'])
+        result = delete_membership(data['student_id'], data['club_id'])
         if "error" in result:
             return jsonify(result), 400
 
