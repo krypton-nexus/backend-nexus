@@ -118,6 +118,7 @@ def login_admin():
                 'admin_id': admin['id'],
                 'email': admin['email'],
                 'role': admin['role'],
+                'club_id':admin['club_id']
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
             }
             token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')

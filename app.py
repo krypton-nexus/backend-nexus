@@ -15,7 +15,8 @@ from routes.event_routes import event_bp
 from service.chatbot import chat
 from openai import AzureOpenAI
 app = Flask(__name__)
-CORS(app)
+# Enable CORS globally for all routes
+CORS(app, supports_credentials=True)
 # Register Blueprints
 app.register_blueprint(student_bp, url_prefix='/student')
 app.register_blueprint(auth_bp, url_prefix='/auth')

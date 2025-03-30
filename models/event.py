@@ -27,28 +27,32 @@ def insert_event(data):
     if connection:
         try:
             cursor = connection.cursor()
+            # Always ensure images is a list
+            images_array = data.get('images', [])
+            if isinstance(images_array, str):  # If a single URL string is provided, make it a list
+                images_array = [images_array]
 
+# Serialize the list into JSON format
+            images_json = json.dumps(images_array)
             # SQL query to insert event data
             insert_query = """
-            INSERT INTO event_management (event_name, event_date, event_time, venue, mode, event_description, participant_count, images, club_id,category,ispublic,meeting_note,count_maybe)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
-            """
+    INSERT INTO event_management (event_name, event_date, event_time, venue, mode, event_description, participant_count, images, club_id, category, ispublic, count_maybe)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+"""
             cursor.execute(insert_query, (
-                data['event_name'],               # Event Name
-                data['event_date'],               # Event Date
-                data['event_time'],               # Event Time
-                data['venue'],                    # Venue
-                data['mode'],                     # Mode (online or physical)
-                data['event_description'],        # Event Description
-                0,                                # Initial participant count
-                json.dumps(data.get('images', {})),  # Images JSON (default to empty dict)
-                data['club_id'],                 # Club ID (Foreign Key)
-                data['category'],
-                1,
-                data['meeting_note'],
-                0
-
-            ))
+    data['event_name'],                # Event Name
+    data['event_date'],                # Event Date
+    data['event_time'],                # Event Time
+    data['venue'],                     # Venue
+    data['mode'],                      # Mode (online or physical)
+    data['event_description'],         # Event Description
+    0,                                 # Initial participant count
+    images_json, # Images JSON (default to empty dict)
+    data['club_id'],                  # Club ID (Foreign Key)
+    data['category'], 
+    data['ispublic'], 
+    0                                  # count_maybe
+))
 
             connection.commit()
             return {"message": "Event inserted successfully"}

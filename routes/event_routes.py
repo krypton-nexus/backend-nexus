@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from models.event import insert_event, list_events_by_club, add_participant_to_event,delete_event_by_id,delete_participant_from_event,get_participant_count,edit_event
 from JWT.jwt_require import jwt_required
+from flask_cors import cross_origin
 event_bp = Blueprint('event', __name__)
 
 @event_bp.route('/get_events', methods=['GET'])
@@ -71,6 +72,7 @@ def create_event():
 
 @event_bp.route('/add_participant', methods=['POST'])
 @jwt_required
+@cross_origin()
 def add_event_participant():
     """
     Endpoint to add a participant to an event.
@@ -287,6 +289,38 @@ def add_meeting_note():
 
     except Exception as e:
         connection.rollback()
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        cursor.close()
+        connection.close()
+
+@event_bp.route('get_meeting_note/<int:event_id>', methods=['GET'])
+@jwt_required
+def get_meeting_note(event_id):
+    """
+    Endpoint to fetch the meeting note for a specific event.
+    :param event_id: ID of the event
+    :return: JSON response with meeting note
+    """
+    try:
+        connection = get_connection()
+        if connection:
+            cursor = connection.cursor()
+
+            # Fetch query
+            select_query = """
+            SELECT meeting_note FROM event_management WHERE id = %s;
+            """
+            cursor.execute(select_query, (event_id,))
+            result = cursor.fetchone()
+
+            if result:
+                return jsonify({"event_id": event_id, "meeting_note": result[0]}), 200
+            else:
+                return jsonify({"error": "Event not found"}), 404
+
+    except Exception as e:
         return jsonify({"error": str(e)}), 500
 
     finally:
