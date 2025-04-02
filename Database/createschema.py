@@ -256,9 +256,9 @@ def create_category_table():
             CREATE TABLE IF NOT EXISTS category (
                 category_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 transaction_type_id INT NOT NULL,
-                club_id INT NOT NULL,
+                club_id VARCHAR(100) NOT NULL,
                 category_name VARCHAR(100) NOT NULL,
-                FOREIGN KEY (club_id) REFERENCES clubs(club_id),
+                FOREIGN KEY (club_id) REFERENCES clubs(id),
                 FOREIGN KEY (transaction_type_id) REFERENCES transaction_type(transaction_type_id) ON DELETE CASCADE
             );
             """
@@ -271,7 +271,7 @@ def create_category_table():
         finally:
             cursor.close()
             connection.close()
- def create_transaction_table():
+def create_transaction_table():
     """Creates the transaction table with Sri Lanka local time for timestamps."""
     connection = get_connection()
     if connection:
@@ -317,4 +317,7 @@ def create_category_table():
 #create_membership_table()
 #create_admin_notification_table()
 #create_product_table()
+#create_transaction_table()
+#create_transaction_type_table()
+#create_category_table()
 create_transaction_table()
