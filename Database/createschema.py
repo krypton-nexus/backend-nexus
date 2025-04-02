@@ -271,6 +271,40 @@ def create_category_table():
         finally:
             cursor.close()
             connection.close()
+def create_transaction_table():
+    """Creates the transaction table with Sri Lanka local time for timestamps."""
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+
+            # SQL query to create the table
+            create_table_query = """
+            CREATE TABLE IF NOT EXISTS transactions (
+                ID INT AUTO_INCREMENT PRIMARY KEY,
+                Date DATE,
+                Name VARCHAR(35),
+                Description VARCHAR(150),
+                Category VARCHAR(50),
+                Amount DECIMAL(10, 2),
+                Type ENUM('Income', 'Expense') NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP
+            );
+            """
+
+            # Execute query
+            cursor.execute(create_table_query)
+            connection.commit()
+            print("Table 'transactions' created successfully.")
+
+        except Exception as e:
+            connection.rollback()
+            print(f"Error creating table: {e}")
+
+        finally:
+            cursor.close()
+            connection.close()
 
 # Call the function to create the table
 #create_student_table()

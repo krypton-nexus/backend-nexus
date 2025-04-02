@@ -101,7 +101,7 @@ def login_admin():
         connection = get_connection()
         if connection:
             cursor = connection.cursor(dictionary=True)
-            cursor.execute("SELECT id, email, password, role, is_active FROM admins WHERE email = %s", (email,))
+            cursor.execute("SELECT id, email, password, role,club_id, is_active FROM admins WHERE email = %s", (email,))
             admin = cursor.fetchone()
 
             if not admin:
