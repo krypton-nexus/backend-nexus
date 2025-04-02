@@ -286,12 +286,14 @@ def create_transaction_table():
                 Name VARCHAR(35) NOT NULL,
                 Description VARCHAR(150),
                 category_id INT NOT NULL,
+                club_id VARCHAR(15) NOT NULL,
                 Amount DECIMAL(10, 2) NOT NULL,
                 transaction_type_id INT NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
                 FOREIGN KEY (category_id) REFERENCES category(category_id) ON DELETE CASCADE,
-                FOREIGN KEY (transaction_type_id) REFERENCES transaction_type(transaction_type_id) ON DELETE CASCADE
+                FOREIGN KEY (transaction_type_id) REFERENCES transaction_type(transaction_type_id) ON DELETE CASCADE,
+                FOREIGN KEY (club_id) REFERENCES clubs(id) ON DELETE CASCADE
             );
             """
 
@@ -320,4 +322,4 @@ def create_transaction_table():
 #create_transaction_table()
 #create_transaction_type_table()
 #create_category_table()
-create_transaction_table()
+#create_transaction_table()
