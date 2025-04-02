@@ -271,7 +271,7 @@ def create_category_table():
         finally:
             cursor.close()
             connection.close()
-def create_transaction_table():
+ def create_transaction_table():
     """Creates the transaction table with Sri Lanka local time for timestamps."""
     connection = get_connection()
     if connection:
@@ -282,14 +282,16 @@ def create_transaction_table():
             create_table_query = """
             CREATE TABLE IF NOT EXISTS transactions (
                 ID INT AUTO_INCREMENT PRIMARY KEY,
-                Date DATE,
-                Name VARCHAR(35),
+                Date DATE NOT NULL,
+                Name VARCHAR(35) NOT NULL,
                 Description VARCHAR(150),
-                Category VARCHAR(50),
-                Amount DECIMAL(10, 2),
-                Type ENUM('Income', 'Expense') NOT NULL,
+                category_id INT NOT NULL,
+                Amount DECIMAL(10, 2) NOT NULL,
+                transaction_type_id INT NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP
+                updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
+                FOREIGN KEY (category_id) REFERENCES category(category_id) ON DELETE CASCADE,
+                FOREIGN KEY (transaction_type_id) REFERENCES transaction_type(transaction_type_id) ON DELETE CASCADE
             );
             """
 
@@ -300,11 +302,12 @@ def create_transaction_table():
 
         except Exception as e:
             connection.rollback()
-            print(f"Error creating table: {e}")
+            print(f"Error creating table 'transactions': {e}")
 
         finally:
             cursor.close()
             connection.close()
+
 
 # Call the function to create the table
 #create_student_table()
@@ -314,3 +317,4 @@ def create_transaction_table():
 #create_membership_table()
 #create_admin_notification_table()
 #create_product_table()
+create_transaction_table()
