@@ -15,3 +15,5 @@ sudo supervisorctl start gunicorn
 git clone --branch kajaluxshan --single-branch https://github.com/krypton-nexus/frontend.git
 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
 git pull origin keerthan_se/2019/040 --rebase  # Fetch and reapply your changes on top         # Push after syncing
+git pull --rebase origin keerthan_se/2019/040
+git push origin keerthan_se/2019/040
