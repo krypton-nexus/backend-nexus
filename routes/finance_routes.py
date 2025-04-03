@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify
 from models.finance import get_transactions_by_club_id
 from JWT.jwt_require import jwt_required
-club_bp = Blueprint('finance', __name__)
+finance_bp = Blueprint('finance', __name__)
 
-@event_bp.route('/get_transactions', methods=['GET'])
+@finance_bp.route('/get_transactions', methods=['GET'])
 # @jwt_required
 def get_transactions_by_club():
     """

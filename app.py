@@ -12,7 +12,7 @@ from flask_cors import CORS
 from routes.membership_routes import membership_bp
 from routes.notification_admin_routes import notification_admin_bp
 from routes.event_routes import event_bp
-from service.chatbot import chat
+from routes.finance_routes import finance_bp
 from openai import AzureOpenAI
 app = Flask(__name__)
 # Enable CORS globally for all routes
@@ -25,7 +25,7 @@ app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(membership_bp, url_prefix='/membership')
 app.register_blueprint(notification_admin_bp, url_prefix='/notification_admin')
 app.register_blueprint(event_bp, url_prefix='/event')
-
+app.register_blueprint(finance_bp, url_prefix='/finance')
 # Azure OpenAI credentials
 AZURE_API_KEY = "0b9c53361dc945f4a866356180073582"
 AZURE_ENDPOINT = "https://iwmi-chat-demo.openai.azure.com/"
