@@ -217,7 +217,7 @@ event_1 = {
 #insert_event(event_1)
 
 def insert_transactions():
-    transactions = [
+    transactions_income = [
         ('2024-04-15', 'Annual Membership Renewal', 'Received annual membership renewal fee from a long-term member', 1, 'club_sesa', 12000.00, 1),
         ('2024-06-20', 'Premium Membership Dues', 'Collected premium dues from a corporate member', 1, 'club_sesa', 15000.00, 1),
         ('2024-09-10', 'Standard Membership Payment', 'Processed standard membership fee from a new member', 1, 'club_sesa', 8000.00, 1),
@@ -244,6 +244,35 @@ def insert_transactions():
         ('2024-12-20', 'Workshop Revenue', 'Income from hosting a community workshop on skill development', 17, 'club_sesa', 9500.00, 1),
         ('2025-03-25', 'Grant Income', 'Additional income received through small grants and support programs', 17, 'club_sesa', 9000.00, 1)
     ]
+    transactions_expense =[
+    ('2024-04-16', 'Raw Material Purchase for Merchandise', 'Purchased premium cotton and fabric for new merchandise production', 9, 'club_sesa', 12000.00, 2),
+    ('2024-07-01', 'T-Shirt Production Costs', 'Paid production costs for a bulk order of club T-shirts', 9, 'club_sesa', 15000.00, 2),
+    ('2024-09-12', 'Printing and Branding Expenses', 'Expenses for printing logos on club apparel and merchandise', 9, 'club_sesa', 13000.00, 2),
+    ('2025-01-15', 'Inventory Restocking', 'Restocked merchandise inventory for upcoming club events', 9, 'club_sesa', 14000.00, 2),
+    ('2025-03-05', 'Quality Control and Packaging', 'Quality control checks and packaging expenses for merchandise', 9, 'club_sesa', 12500.00, 2),
+    ('2024-05-10', 'Venue Rental for Annual Gala', 'Rented an exclusive venue for the annual club gala', 11, 'club_sesa', 16000.00, 2),
+    ('2024-08-20', 'Event Marketing and Promotion', 'Invested in promotional campaigns for a major club event', 11, 'club_sesa', 14000.00, 2),
+    ('2024-10-05', 'Entertainment and Speaker Fees', 'Paid fees for entertainers and speakers at the club event', 11, 'club_sesa', 15500.00, 2),
+    ('2025-02-10', 'Logistics and Setup Costs', 'Expenses for event setup, logistics, and coordination', 11, 'club_sesa', 14500.00, 2),
+    ('2025-03-20', 'Decoration and Equipment Rental', 'Costs for decorations and rental of event equipment', 11, 'club_sesa', 13500.00, 2),
+    ('2024-04-25', 'Catering for Club Gathering', 'Catering expenses for a large club gathering event', 13, 'club_sesa', 12500.00, 2),
+    ('2024-07-15', 'Food Supplies Purchase', 'Procured quality food supplies for a community event', 13, 'club_sesa', 11500.00, 2),
+    ('2024-09-30', 'Beverage Provision for Meetup', 'Purchased beverages for a local community meetup', 13, 'club_sesa', 13000.00, 2),
+    ('2025-01-12', 'Meal Provisioning for Workshop', 'Expenses for providing meals during a club workshop', 13, 'club_sesa', 14000.00, 2),
+    ('2025-03-08', 'Snacks and Refreshments Purchase', 'Purchased snacks and refreshments for event attendees', 13, 'club_sesa', 12000.00, 2),
+    ('2024-05-18', 'Photography Service Fee', 'Paid a professional photographer for event coverage', 15, 'club_sesa', 15000.00, 2),
+    ('2024-08-05', 'Equipment Rental for Photo Shoot', 'Rented photography equipment for high-profile event shoots', 15, 'club_sesa', 14000.00, 2),
+    ('2024-10-20', 'Photo Editing Services', 'Costs incurred for professional photo editing and post-processing', 15, 'club_sesa', 13500.00, 2),
+    ('2025-02-25', 'Travel Expenses for Photographer', 'Covered travel expenses for photographer during an offsite event', 15, 'club_sesa', 14500.00, 2),
+    ('2025-03-28', 'Photography Licensing Fees', 'Paid licensing fees for usage of event photographs in promotions', 15, 'club_sesa', 15500.00, 2),
+    ('2024-06-05', 'Office Administrative Costs', 'Expenses for office administration and management tasks', 19, 'club_sesa', 11000.00, 2),
+    ('2024-08-10', 'Stationery and Office Supplies', 'Purchased stationery and other office supplies for daily operations', 19, 'club_sesa', 10000.00, 2),
+    ('2024-11-03', 'Monthly Utility Bills Payment', 'Paid utility bills for the club office and facilities', 19, 'club_sesa', 12000.00, 2),
+    ('2025-01-20', 'Facility Maintenance and Repairs', 'Maintenance and repair costs for club premises and equipment', 19, 'club_sesa', 13000.00, 2),
+    ('2025-03-12', 'Miscellaneous Operational Expense', 'Other miscellaneous expenses related to club operations', 19, 'club_sesa', 11500.00, 2)
+]
+
+
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -251,7 +280,7 @@ def insert_transactions():
     query = '''INSERT INTO transactions 
             (Date, Name, Description, category_id, club_id, Amount, transaction_type_id) 
             VALUES (%s, %s, %s, %s, %s, %s, %s);'''
-    cursor.executemany(query, transactions)
+    cursor.executemany(query, transactions_expense)
     
     conn.commit()
     conn.close()
