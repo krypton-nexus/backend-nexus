@@ -57,11 +57,11 @@ def insert_transaction_by_club_id(club_id, transaction_details):
 
             # SQL query to insert the new transaction for the given club_id
             query = """
-            INSERT INTO transactions (Date, Name, Description, Amount, transaction_type_id, category_id, created_at, updated_at)
+            INSERT INTO transactions (Date, Name, Description, Amount, transaction_type_id, category_id, club_id, created_at, updated_at)
             VALUES (%s, %s, %s, %s, 
-                    (SELECT transaction_type_id FROM transaction_type WHERE type_name = %s), 
-                    (SELECT category_id FROM category WHERE category_name = %s), 
-                    NOW(), NOW());
+                    (SELECT transaction_type_id FROM transaction_type WHERE type_name = %s LIMIT 1), 
+                    (SELECT category_id FROM category WHERE category_name = %s AND club_id = %s LIMIT 1), 
+                    %s, NOW(), NOW());
             """
             # Extract transaction details
             date = transaction_details["Date"]
@@ -72,11 +72,11 @@ def insert_transaction_by_club_id(club_id, transaction_details):
             category_name = transaction_details["Category Name"]
 
             # Execute the query with the transaction details
-            cursor.execute(query, (date, name, description, amount, transaction_type, category_name))
+            cursor.execute(query, (date, name, description, amount, transaction_type, category_name, club_id, club_id))
 
             # Commit the transaction
             connection.commit()
-            print(f"Transaction successfully inserted for club_id {club_id}.")
+            return f"Transaction successfully inserted for club_id {club_id}."
 
         except Exception as e:
             print(f"Error inserting transaction for club_id {club_id}: {e}")
