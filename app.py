@@ -15,8 +15,16 @@ from routes.event_routes import event_bp
 from routes.finance_routes import finance_bp
 from openai import AzureOpenAI
 app = Flask(__name__)
-# Enable CORS globally for all routes
-CORS(app, supports_credentials=True)
+
+# Proper CORS Configuration
+CORS(app, resources={
+    r"/*": {
+        "origins": "*",  # Your frontend URL
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        "allow_headers": ["Authorization", "Content-Type"],
+        "supports_credentials": True
+    }
+})
 # Register Blueprints
 app.register_blueprint(student_bp, url_prefix='/student')
 app.register_blueprint(auth_bp, url_prefix='/auth')

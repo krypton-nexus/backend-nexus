@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models.finance import get_transactions_by_club_id,insert_transaction_by_club_id
+from models.finance import get_transactions_by_club_id,insert_transaction_by_club_id,insert_category
 from JWT.jwt_require import jwt_required
 finance_bp = Blueprint('finance', __name__)
 
@@ -61,6 +61,66 @@ def insert_transaction():
         else:
 
             return jsonify({"error": "Failed to insert transaction."}), 500  # Insertion failed
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500  # Internal Server Error if something goes wrong
+
+@finance_bp.route('/insert_category', methods=['POST'])
+def insert_category_endpoint():
+    """
+    Endpoint to insert a new category into the category table.
+    """
+    try:
+        # Extract the JSON data from the request
+        data = request.get_json()
+
+        # Validate the incoming data
+        if not data or 'transaction_type' not in data or 'club_id' not in data or 'category_name' not in data:
+            return jsonify({"error": "Missing required fields: 'transaction_type', 'club_id', or 'category_name'"}), 400  # Bad Request
+
+        # Extract values from the validated data
+        transaction_type = data['transaction_type']
+        club_id = data['club_id']
+        category_name = data['category_name']
+
+        # Call the function to insert the category into the database
+        message = insert_category(transaction_type, club_id, category_name)
+
+        # Return the result as a JSON response
+        if message:
+            return jsonify({"message": "Category successfully added."}), 201
+        else:
+
+            return jsonify({"error": "Failed to add category."}), 500 
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500  # Internal Server Error if something goes wrong
+
+@finance_bp.route('/delete', methods=['DELETE'])
+def delete_transaction_endpoint():
+    """
+    Endpoint to delete a transaction from the transaction table.
+    """
+    try:
+        # Extract the JSON data from the request
+        data = request.get_json()
+
+        # Validate the incoming data
+        if not data or 'transaction_id' not in data or 'club_id' not in data:
+            return jsonify({"error": "Missing required fields: 'transaction_id' or 'club_id'"}), 400  # Bad Request
+
+        # Extract values from the validated data
+        transaction_id = data['transaction_id']
+        club_id = data['club_id']
+
+        # Call the function to delete the transaction from the database
+        message = delete_transaction(transaction_id, club_id)
+
+        # Return the result as a JSON response
+        if message:
+            return jsonify({"message": "Transaction successfully deleted."}), 200
+        else:
+            return jsonify({"error": "Transaction not found or already deleted."}), 404
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500  # Internal Server Error if something goes wrong
