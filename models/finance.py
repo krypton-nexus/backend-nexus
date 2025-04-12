@@ -136,7 +136,7 @@ def delete_transaction(transaction_id, club_id):
         try:
             cursor = connection.cursor()
             delete_query = """
-            DELETE FROM transaction 
+            DELETE FROM transactions 
             WHERE ID = %s AND club_id = %s;
             """
             cursor.execute(delete_query, (transaction_id, club_id))

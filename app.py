@@ -20,11 +20,12 @@ app = Flask(__name__)
 CORS(app, resources={
     r"/*": {
         "origins": "*",  # Your frontend URL
-        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        "methods": ["GET", "POST", "PUT", "DELETE","PATCH", "OPTIONS"],
         "allow_headers": ["Authorization", "Content-Type"],
         "supports_credentials": True
     }
 })
+# CORS(app)
 # Register Blueprints
 app.register_blueprint(student_bp, url_prefix='/student')
 app.register_blueprint(auth_bp, url_prefix='/auth')

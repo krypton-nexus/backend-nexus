@@ -291,8 +291,7 @@ def edit_event(event_id, data):
             update_query = """
             UPDATE event_management
             SET venue = %s, event_date = %s, event_time = %s, 
-                event_description = %s, mode = %s, category = %s, 
-                meeting_note = %s, images = %s
+                event_description = %s, mode = %s, category = %s
             WHERE id = %s;
             """
             cursor.execute(update_query, (
@@ -301,7 +300,9 @@ def edit_event(event_id, data):
                 data['event_time'],           # Updated Time
                 data['event_description'],    # Updated Description
                 data['mode'],                 # Updated Mode (Online/Physical)
-                data['category']            # Updated Category
+                data['category']  ,          # Updated Category,
+                event_id
+
         
             ))
 

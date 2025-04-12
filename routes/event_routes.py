@@ -1,9 +1,11 @@
 from flask import Blueprint, request, jsonify
 from models.event import insert_event, list_events_by_club, add_participant_to_event,delete_event_by_id,delete_participant_from_event,get_participant_count,edit_event
 from JWT.jwt_require import jwt_required
-from flask_cors import cross_origin
+from Database.connection import get_connection
 event_bp = Blueprint('event', __name__)
-from flask_cors import CORS
+
+
+
 @event_bp.route('/get_events', methods=['GET'])
 @jwt_required
 def get_events_by_club():
@@ -71,7 +73,7 @@ def create_event():
 
 
 @event_bp.route('/add_participant', methods=['POST'])
-# @jwt_required
+@jwt_required
 def add_event_participant():
     """
     Endpoint to add a participant to an event.
@@ -107,7 +109,7 @@ def add_event_participant():
         return jsonify({"error": str(e)}), 500
 
 @event_bp.route('/delete_participant', methods=['DELETE'])
-# @jwt_required
+@jwt_required
 def delete_participant():
     """
     Endpoint to delete a participant from an event.
@@ -211,8 +213,8 @@ def get_participant_count_route():
     except Exception as e:
         return jsonify({"error": str(e)}), 500  # Internal server error
 
-@event_bp.route('/edit', methods=['POST'])
-@jwt_required
+@event_bp.route('/update', methods=['POST'])
+# @jwt_required
 def edit_event_route():
     """
     Endpoint to edit an existing event based on event_id.

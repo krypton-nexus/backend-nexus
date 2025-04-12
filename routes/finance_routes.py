@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models.finance import get_transactions_by_club_id,insert_transaction_by_club_id,insert_category
+from models.finance import delete_transaction, get_transactions_by_club_id,insert_transaction_by_club_id,insert_category
 from JWT.jwt_require import jwt_required
 finance_bp = Blueprint('finance', __name__)
 

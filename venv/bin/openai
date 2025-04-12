@@ -1,4 +1,4 @@
-#!/home/ubuntu/nexus/backend/venv/bin/python3
+#!/home/ubuntu/Llama/Nexus/Backend/backend-nexus/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
