@@ -44,7 +44,7 @@ def create_task(data):
                     "id": task_id,
                     "name": data['title'],
                     "description": data.get('description', ''),
-                    "assignee": get_member_name(data['assignee_id']),
+                    "assignee": data['assignee_id'],
                     "club_id": data.get('club_id'),
                     "dueDate": data['due_date'],
                     "priority": data.get('priority', 'Medium'),
@@ -295,7 +295,7 @@ def update_task(task_id, data):
                         "id": updated_task['task_id'],
                         "name": updated_task['title'],
                         "description": updated_task['description'],
-                        "assignee": get_member_name(updated_task['assignee_id']),
+                        "assignee": updated_task['assignee_id'],
                         "club_id": updated_task['club_id'],
                         "dueDate": str(updated_task['due_date']),
                         "priority": updated_task['priority'],
@@ -406,23 +406,6 @@ def create_admin_task(admin_email, club_id, task_name):
             connection.rollback()
             return {"error": str(e)}
             
-        finally:
-            cursor.close()
-            connection.close()
-
-# Helper function
-def get_member_name(member_id):
-    """Helper to get member name from membership table"""
-    connection = get_connection()
-    if connection:
-        try:
-            cursor = connection.cursor(dictionary=True)
-            query = "SELECT student_id FROM membership WHERE id = %s;"
-            cursor.execute(query, (member_id,))
-            result = cursor.fetchone()
-            return result['student_id'] if result else "Unknown"
-        except:
-            return "Unknown"
         finally:
             cursor.close()
             connection.close()
