@@ -69,3 +69,19 @@ def get_member_tasks(member_id):
         return jsonify({"tasks": result}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@task_bp.route('/club/<club_id>', methods=['GET'])
+@jwt_required
+def get_club_tasks(club_id):
+    """
+    Endpoint to get all tasks for a specific club.
+    """
+    try:
+        result = get_all_tasks_by_clubid(club_id)
+        if "error" in result:
+            return jsonify(result), 500
+        elif "message" in result:
+            return jsonify(result), 404
+        return jsonify({"tasks": result}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
