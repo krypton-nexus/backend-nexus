@@ -85,3 +85,37 @@ def get_club_tasks(club_id):
         return jsonify({"tasks": result}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@task_bp.route('/<task_id>', methods=['PUT'])
+@jwt_required
+def update_task_route(task_id):
+    """
+    Endpoint to update a task.
+    """
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "No data provided"}), 400
+
+        result = update_task(task_id, data)
+        if "error" in result:
+            return jsonify(result), 400
+        
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@task_bp.route('/<task_id>', methods=['DELETE'])
+@jwt_required
+def delete_task_route(task_id):
+    """
+    Endpoint to delete a task.
+    """
+    try:
+        result = delete_task(task_id)
+        if "error" in result:
+            return jsonify(result), 404
+        
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
