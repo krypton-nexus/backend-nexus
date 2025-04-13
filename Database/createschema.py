@@ -341,6 +341,34 @@ def create_tasks_table():
         finally:
             cursor.close()
             connection.close()
+def create_admin_tasks_table():
+    """
+    Creates the admin_tasks table in the database
+    """
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+            create_table_query = """
+            CREATE TABLE IF NOT EXISTS admin_tasks (
+                task_id INT AUTO_INCREMENT PRIMARY KEY,
+                admin_email VARCHAR(255) NOT NULL,
+                club_id VARCHAR(15) NOT NULL,
+                task_name VARCHAR(100) NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                FOREIGN KEY (club_id) REFERENCES clubs(id) ON DELETE CASCADE,
+                UNIQUE KEY (admin_email, club_id, task_name)  -- Prevents duplicate entries
+            );
+            """
+            cursor.execute(create_table_query)
+            print("Table 'admin_tasks' created successfully or already exists.")
+        except Exception as err:
+            print(f"Error creating admin_tasks table: {err}")
+        finally:
+            cursor.close()
+            connection.close()
+
 # Call the function to create the table
 #create_student_table()
 #create_club_table()
