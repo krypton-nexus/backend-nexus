@@ -42,3 +42,16 @@ def create_task_route():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@task_bp.route('/<task_id>', methods=['GET'])
+@jwt_required
+def get_task(task_id):
+    """
+    Endpoint to retrieve a task by its ID.
+    """
+    try:
+        result = get_task_by_id(task_id)
+        if "error" in result:
+            return jsonify(result), 404
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
