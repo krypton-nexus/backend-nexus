@@ -144,3 +144,26 @@ def create_admin_task_route():
         return jsonify(result), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@task_bp.route('/admin', methods=['GET'])
+@jwt_required
+def get_admin_tasks_route():
+    """
+    Endpoint to get admin tasks.
+    Requires query parameters: admin_email and club_id
+    Example: /task/admin?admin_email=admin@school.edu&club_id=CLUB001
+    """
+    try:
+        admin_email = request.args.get('admin_email')
+        club_id = request.args.get('club_id')
+        
+        if not admin_email or not club_id:
+            return jsonify({"error": "Both admin_email and club_id are required"}), 400
+
+        result = get_admin_tasks(admin_email, club_id)
+        if "error" in result:
+            return jsonify(result), 500
+            
+        return jsonify({"tasks": result}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
