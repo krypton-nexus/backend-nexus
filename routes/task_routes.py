@@ -55,3 +55,17 @@ def get_task(task_id):
         return jsonify(result), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@task_bp.route('/member/<int:member_id>', methods=['GET'])
+@jwt_required
+def get_member_tasks(member_id):
+    """
+    Endpoint to get all tasks for a specific member.
+    """
+    try:
+        result = get_all_tasks_for_memberid(member_id)
+        if "error" in result:
+            return jsonify(result), 500
+        return jsonify({"tasks": result}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
