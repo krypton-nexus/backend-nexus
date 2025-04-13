@@ -139,15 +139,40 @@ def list_all_membership(club_id):
 
             # SQL query to fetch all memberships for the given club_id, including the created_at field
             select_query = """
-            SELECT student_id, status, created_at FROM membership WHERE club_id = %s;
+            SELECT 
+    m.student_id,
+    m.status,
+    m.created_at,
+    s.first_name,
+    s.last_name,
+    s.email,
+    s.phone_number
+FROM 
+    membership m
+JOIN 
+    student s ON m.student_id = s.student_number
+WHERE 
+    m.club_id = %s;
             """
             cursor.execute(select_query, (club_id,))
             memberships = cursor.fetchall()
 
             if memberships:
                 # Return all the memberships for the club with the created_at field
-                return {"memberships": [{"student_email": email, "status": status, "created_at": created_at} 
-                                        for email, status, created_at in memberships]}
+                return {"memberships":  [
+        {
+            "student_id": member['student_id'],
+            "status": member['status'],
+            "created_at": str(member['created_at']),  # Convert datetime to string
+            "first_name": member['first_name'],
+            "last_name": member['last_name'],
+            "email": member['email'],
+            "phone_number": member['phone_number'],
+            "full_name": f"{member['first_name']} {member['last_name']}"  # Added convenience field
+        }
+        for member in memberships  # Assuming memberships is a list of dictionaries from cursor.fetchall()
+    ]
+}
             else:
                 return {"message": "No memberships found for the specified club."}
         
