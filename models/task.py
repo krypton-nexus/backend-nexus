@@ -131,7 +131,7 @@ def get_all_tasks_for_memberid(member_id):
                 s.phone_number
             FROM tasks t
             JOIN membership m ON t.assignee_id = m.id
-            JOIN student s ON m.student_id = s.student_number
+            JOIN student s ON m.student_id = s.email
             WHERE t.assignee_id = %s
             ORDER BY t.due_date;
             """
