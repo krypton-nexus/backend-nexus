@@ -119,3 +119,28 @@ def delete_task_route(task_id):
         return jsonify(result), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@task_bp.route('/admin', methods=['POST'])
+@jwt_required
+def create_admin_task_route():
+    """
+    Endpoint to create an admin task.
+    Expected JSON:
+    {
+        "admin_email": "admin@example.com",
+        "club_id": "CLUB001",
+        "task_name": "Review Budget"
+    }
+    """
+    try:
+        data = request.get_json()
+        if not data or not all(k in data for k in ["admin_email", "club_id", "task_name"]):
+            return jsonify({"error": "Missing required fields"}), 400
+
+        result = create_admin_task(data["admin_email"], data["club_id"], data["task_name"])
+        if "error" in result:
+            return jsonify(result), 400
+        
+        return jsonify(result), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
