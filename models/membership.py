@@ -150,7 +150,7 @@ def list_all_membership(club_id):
 FROM 
     membership m
 JOIN 
-    student s ON m.student_id = s.student_number
+    student s ON m.student_id = s.email
 WHERE 
     m.club_id = %s;
             """
