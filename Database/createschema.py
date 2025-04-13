@@ -310,7 +310,37 @@ def create_transaction_table():
             cursor.close()
             connection.close()
 
-
+def create_tasks_table():
+    """
+    Creates the tasks table in the database
+    """
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+            create_table_query = """
+            CREATE TABLE IF NOT EXISTS tasks (
+                task_id VARCHAR(36) PRIMARY KEY,
+                title VARCHAR(100) NOT NULL,
+                description TEXT,
+                assignee_id INT NOT NULL,
+                club_id VARCHAR(15),
+                due_date DATE NOT NULL,
+                priority ENUM('Low', 'Medium', 'High', 'Very High') DEFAULT 'Medium',
+                status ENUM('To Do', 'In Progress', 'Complete', 'Done') DEFAULT 'To Do',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                FOREIGN KEY (assignee_id) REFERENCES membership(id) ON DELETE CASCADE,
+                FOREIGN KEY (club_id) REFERENCES clubs(id) ON DELETE SET NULL
+            );
+            """
+            cursor.execute(create_table_query)
+            print("Table 'tasks' created successfully or already exists.")
+        except Exception as err:
+            print(f"Error creating tasks table: {err}")
+        finally:
+            cursor.close()
+            connection.close()
 # Call the function to create the table
 #create_student_table()
 #create_club_table()
