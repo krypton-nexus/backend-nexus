@@ -135,11 +135,12 @@ def list_all_membership(club_id):
     connection = get_connection()
     if connection:
         try:
-            cursor = connection.cursor()
+            cursor = connection.cursor(dictionary=True)
 
             # SQL query to fetch all memberships for the given club_id, including the created_at field
             select_query = """
-            SELECT 
+            SELECT
+    m.id,
     m.student_id,
     m.status,
     m.created_at,
@@ -161,6 +162,7 @@ WHERE
                 # Return all the memberships for the club with the created_at field
                 return {"memberships":  [
         {
+            "member_id":member["id"],
             "student_id": member['student_id'],
             "status": member['status'],
             "created_at": str(member['created_at']),  # Convert datetime to string

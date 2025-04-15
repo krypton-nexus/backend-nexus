@@ -13,19 +13,18 @@ def create_task(data):
         try:
             cursor = connection.cursor(dictionary=True)
             
-            # Generate task ID similar to frontend format
-            task_id = f"task-{uuid.uuid4()}"
+    
             
             # SQL query to insert task
             insert_query = """
             INSERT INTO tasks (
-                task_id, title, description, assignee_id, 
+            title, description, assignee_id, 
                 club_id, due_date, priority, status
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s);
             """
             
             cursor.execute(insert_query, (
-                task_id,
+             
                 data['title'],
                 data.get('description', ''),
                 data['assignee_id'],
@@ -41,7 +40,6 @@ def create_task(data):
             return {
                 "message": "Task created successfully",
                 "task": {
-                    "id": task_id,
                     "name": data['title'],
                     "description": data.get('description', ''),
                     "assignee": data['assignee_id'],
@@ -195,7 +193,6 @@ def get_all_tasks_by_clubid(club_id):
             t.priority as task_priority,
             t.status as task_status,
             m.id as membership_id,
-            s.student_id,
             s.first_name,
             s.last_name,
             s.email,
@@ -203,7 +200,7 @@ def get_all_tasks_by_clubid(club_id):
             c.title as club_name
         FROM tasks t
         JOIN membership m ON t.assignee_id = m.id
-        JOIN student s ON m.student_id = s.student_number
+        JOIN student s ON m.student_id = s.email
         JOIN clubs c ON t.club_id = c.id
         WHERE t.club_id = %s;
         """
@@ -228,7 +225,6 @@ def get_all_tasks_by_clubid(club_id):
                 "status": task['task_status'],
                 "assignee_details": {
                     "membership_id": task['membership_id'],
-                    "student_id": task['student_id'],
                     "first_name": task['first_name'],
                     "last_name": task['last_name'],
                     "full_name": f"{task['first_name']} {task['last_name']}",

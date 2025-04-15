@@ -13,7 +13,7 @@ from models.task import (
 
 task_bp = Blueprint('task', __name__)
 
-@task_bp.route('/', methods=['POST'])
+@task_bp.route('/clubtask', methods=['POST'])
 @jwt_required
 def create_task_route():
     """
@@ -165,5 +165,21 @@ def get_admin_tasks_route():
             return jsonify(result), 500
             
         return jsonify({"tasks": result}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+@task_bp.route('delete/club/<task_id>', methods=['DELETE'])
+@jwt_required
+def delete_task_route(task_id):
+    """
+    Endpoint to delete a task.
+    Deletes a task by its ID from the URL.
+    Example: DELETE /task/123
+    """
+    try:
+        result = delete_task(task_id)
+        if "error" in result:
+            return jsonify(result), 404
+        
+        return jsonify(result), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
