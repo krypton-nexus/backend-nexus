@@ -272,31 +272,20 @@ def update_task(task_id, data):
                 return {"error": "No valid fields provided for update"}
             
             update_query = f"""
-            UPDATE tasks 
-            SET {", ".join(update_fields)}
-            WHERE task_id = %s
-            RETURNING *;
-            """
+UPDATE tasks 
+SET {", ".join(update_fields)}
+WHERE task_id = %s;
+"""
             
             values.append(task_id)
             cursor.execute(update_query, tuple(values))
             updated_task = cursor.fetchone()
-            
+            print( updated_task)
             connection.commit()
             
-            if updated_task:
+            if cursor.rowcount:
                 return {
-                    "message": "Task updated successfully",
-                    "task": {
-                        "id": updated_task['task_id'],
-                        "name": updated_task['title'],
-                        "description": updated_task['description'],
-                        "assignee": updated_task['assignee_id'],
-                        "club_id": updated_task['club_id'],
-                        "dueDate": str(updated_task['due_date']),
-                        "priority": updated_task['priority'],
-                        "status": updated_task['status']
-                    }
+                    "message": "Task updated successfully"
                 }
             else:
                 return {"error": "Task not found"}
@@ -405,3 +394,42 @@ def create_admin_task(admin_email, club_id, task_name):
         finally:
             cursor.close()
             connection.close()
+
+def delete_admin_task(task_id):
+    """
+    Deletes an admin task by task ID.
+    :param task_id: ID of the task to delete
+    :return: Result message or error
+    """
+    if not task_id:
+        return {"error": "Task ID is required"}
+
+    connection = get_connection()
+    if not connection:
+        return {"error": "Database connection failed"}
+
+    try:
+        cursor = connection.cursor(dictionary=True)
+
+        # First, check if the task exists
+        check_query = "SELECT * FROM admin_tasks WHERE task_id = %s"
+        cursor.execute(check_query, (task_id,))
+        task = cursor.fetchone()
+
+        if not task:
+            return {"error": "Task not found"}
+
+        # Delete the task
+        delete_query = "DELETE FROM admin_tasks WHERE task_id = %s"
+        cursor.execute(delete_query, (task_id,))
+        connection.commit()
+
+        return {"message": "Admin task deleted successfully"}
+
+    except Exception as e:
+        connection.rollback()
+        return {"error": f"Database error: {str(e)}"}
+
+    finally:
+        cursor.close()
+        connection.close()

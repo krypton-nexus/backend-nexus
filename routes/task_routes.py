@@ -8,7 +8,8 @@ from models.task import (
     update_task,
     delete_task,
     get_admin_tasks,
-    create_admin_task
+    create_admin_task,
+    delete_admin_task
 )
 
 task_bp = Blueprint('task', __name__)
@@ -105,20 +106,6 @@ def update_task_route(task_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@task_bp.route('/<task_id>', methods=['DELETE'])
-@jwt_required
-def delete_task_route(task_id):
-    """
-    Endpoint to delete a task.
-    """
-    try:
-        result = delete_task(task_id)
-        if "error" in result:
-            return jsonify(result), 404
-        
-        return jsonify(result), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 @task_bp.route('/admin', methods=['POST'])
 @jwt_required
@@ -180,6 +167,20 @@ def delete_task_route(task_id):
         if "error" in result:
             return jsonify(result), 404
         
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@task_bp.route('/delete/admin/<int:task_id>', methods=['DELETE'])
+@jwt_required
+def delete_admin_task_route(task_id):
+    """
+    Endpoint to delete an admin task by task ID.
+    """
+    try:
+        result = delete_admin_task(task_id)
+        if "error" in result:
+            return jsonify(result), 404
         return jsonify(result), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500

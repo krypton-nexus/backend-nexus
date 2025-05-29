@@ -14,6 +14,7 @@ from routes.notification_admin_routes import notification_admin_bp
 from routes.event_routes import event_bp
 from routes.finance_routes import finance_bp
 from routes.task_routes import task_bp
+from Database.connection import get_connection
 from openai import AzureOpenAI
 app = Flask(__name__)
 
@@ -121,8 +122,8 @@ def chat():
 
 @app.route('/')
 def home():
-    return jsonify({"message": "Welcome to the Nexus API"}), 200
-
+    get_connection()
+    return "done"
     
 @app.route('/endpoints', methods=['GET'])
 def list_endpoints():

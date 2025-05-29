@@ -41,7 +41,7 @@ def send_verification_email(email, name):
     try:
         # Generate the verification token
         token = generate_verification_token(email)
-        verification_url = f"http://43.205.202.255:5000/auth/verify/{token}"  # Replace with your domain or IP
+        verification_url = f"http://13.247.207.132:5000/auth/verify/{token}"  # Replace with your domain or IP
 
         msg = Message(
             subject="Verify Your Email",
