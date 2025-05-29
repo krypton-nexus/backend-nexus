@@ -14,6 +14,7 @@ from routes.notification_admin_routes import notification_admin_bp
 from routes.event_routes import event_bp
 from routes.finance_routes import finance_bp
 from routes.task_routes import task_bp
+from routes.merchandise_routes import merchandise_bp
 from Database.connection import get_connection
 from openai import AzureOpenAI
 app = Flask(__name__)
@@ -38,6 +39,7 @@ app.register_blueprint(notification_admin_bp, url_prefix='/notification_admin')
 app.register_blueprint(event_bp, url_prefix='/event')
 app.register_blueprint(finance_bp, url_prefix='/finance')
 app.register_blueprint(task_bp, url_prefix='/task')
+app.register_blueprint(merchandise_bp, url_prefix='/merchandise')
 # Azure OpenAI credentials
 AZURE_API_KEY = "0b9c53361dc945f4a866356180073582"
 AZURE_ENDPOINT = "https://iwmi-chat-demo.openai.azure.com/"
