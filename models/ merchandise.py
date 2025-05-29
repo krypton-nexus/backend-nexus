@@ -95,3 +95,46 @@ def update_product(product_id, data):
             cursor.close()
             connection.close()
 
+# ----------------------- Orders -----------------------
+
+def create_order(data):
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+
+            cursor.execute("SELECT product_quantity FROM products WHERE id = %s", (data['product_id'],))
+            stock = cursor.fetchone()
+            if not stock or stock[0] < data['product_quantity']:
+                return {"error": "Insufficient stock"}
+
+            insert_query = """
+                INSERT INTO orders (product_id, club_id, product_quantity, order_amount, 
+                customer_name, customer_email, customer_phone, customer_address)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            """
+            cursor.execute(insert_query, (
+                data['product_id'],
+                data['club_id'],
+                data['product_quantity'],
+                data['order_amount'],
+                data['customer_name'],
+                data['customer_email'],
+                data['customer_phone'],
+                data['customer_address']
+            ))
+
+            cursor.execute(
+                "UPDATE products SET product_quantity = product_quantity - %s WHERE id = %s",
+                (data['product_quantity'], data['product_id'])
+            )
+
+            connection.commit()
+            return {"message": "Order created successfully"}
+        except Exception as e:
+            connection.rollback()
+            return {"error": str(e)}
+        finally:
+            cursor.close()
+            connection.close()
+
