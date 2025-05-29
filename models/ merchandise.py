@@ -138,3 +138,105 @@ def create_order(data):
             cursor.close()
             connection.close()
 
+def get_all_orders():
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor(dictionary=True)
+            cursor.execute("""
+                SELECT o.*, p.product_name 
+                FROM orders o 
+                JOIN products p ON o.product_id = p.id 
+                ORDER BY o.created_at DESC
+            """)
+            return cursor.fetchall()
+        except Exception as e:
+            return {"error": str(e)}
+        finally:
+            cursor.close()
+            connection.close()
+
+
+def get_orders_by_club(club_id):
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor(dictionary=True)
+            cursor.execute("""
+                SELECT o.*, p.product_name 
+                FROM orders o 
+                JOIN products p ON o.product_id = p.id 
+                WHERE o.club_id = %s 
+                ORDER BY o.created_at DESC
+            """, (club_id,))
+            return cursor.fetchall()
+        except Exception as e:
+            return {"error": str(e)}
+        finally:
+            cursor.close()
+            connection.close()
+
+
+def update_order_status(order_id, status):
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+            cursor.execute("""
+                UPDATE orders 
+                SET order_status = %s, updated_at = CURRENT_TIMESTAMP 
+                WHERE order_id = %s
+            """, (status, order_id))
+            connection.commit()
+            return {"message": "Order status updated successfully"}
+        except Exception as e:
+            connection.rollback()
+            return {"error": str(e)}
+        finally:
+            cursor.close()
+            connection.close()
+
+
+# ----------------------- Dashboard -----------------------
+
+def get_dashboard_stats(club_id):
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor(dictionary=True)
+
+            cursor.execute("SELECT COUNT(*) AS total_products FROM products WHERE club_id = %s", (club_id,))
+            total_products = cursor.fetchone()['total_products']
+
+            cursor.execute("SELECT COUNT(*) AS total_orders FROM orders WHERE club_id = %s", (club_id,))
+            total_orders = cursor.fetchone()['total_orders']
+
+            cursor.execute("""
+                SELECT order_status, COUNT(*) AS count 
+                FROM orders 
+                WHERE club_id = %s 
+                GROUP BY order_status
+            """, (club_id,))
+            status_counts = cursor.fetchall()
+
+            cursor.execute("""
+                SELECT o.*, p.product_name 
+                FROM orders o 
+                JOIN products p ON o.product_id = p.id 
+                WHERE o.club_id = %s 
+                ORDER BY o.created_at DESC 
+                LIMIT 5
+            """, (club_id,))
+            recent_orders = cursor.fetchall()
+
+            return {
+                'total_products': total_products,
+                'total_orders': total_orders,
+                'orders_by_status': status_counts,
+                'recent_orders': recent_orders
+            }
+        except Exception as e:
+            return {"error": str(e)}
+        finally:
+            cursor.close()
+            connection.close()
