@@ -1,6 +1,7 @@
 from Database.connection import get_connection
 import json
 import uuid
+from service.emailservice import send_task_assignment_email
 
 def create_task(data):
     """
@@ -35,7 +36,20 @@ def create_task(data):
             ))
             
             connection.commit()
-            
+            cursor.execute("""
+    SELECT s.email, CONCAT(s.first_name, ' ', s.last_name) AS member_name
+    FROM membership cm
+    JOIN students s ON cm.student_id = s.email
+    WHERE cm.id = %s
+""", (data['assignee_id'],))
+
+            assignee = cursor.fetchone()
+            if not assignee:
+                return {"error": "Assignee not found"}
+
+            assignee_email = assignee[0]
+            member_name = assignee[1]
+            send_task_assignment_email(assignee_email,member_name,data)
             # Return the created task
             return {
                 "message": "Task created successfully",

@@ -90,3 +90,79 @@ def send_admin_notification(email, member_name, club_id):
         print(f"Notification email sent to admin: {email}.")
     except Exception as e:
         print(f"Error sending email to admin: {e}")
+
+def send_merch_order_email(data, status):
+    """
+    Sends a merchandise order confirmation email to the customer.
+
+    :param data: Dictionary containing product and customer details.
+    :param order_id: Unique ID of the order.
+    :param status: Current status of the order (e.g., 'confirmed', 'shipped', etc.).
+    """
+    try:
+        msg = Message(
+            subject=f"Your Merchandise Order with Club #{data['club_id']}",
+            sender=MAIL_USERNAME,
+            recipients=[data['customer_email']],
+            body=(
+                f"Hi {data['customer_name']},\n\n"
+                f"Thank you for ordering with Club #{data['club_id']}!\n\n"
+                f"We’re excited to let you know that your merchandise order has been received and is currently {status}.\n"
+                f"Below are the details of your order:\n\n"
+                f"Product: {data['product_name']}\n"
+                f"Number of Items: {data['product_quantity']}\n"
+                f"Total Amount Paid: ₹{data['order_amount']}\n\n"
+                f"Our team is now processing your order, and you will receive updates at every important step—"
+                f"whether it's being packed, shipped, or ready for pickup/delivery.\n\n"
+                f"If you have any questions or notice something wrong with your order details, "
+                f"feel free to reach out to us as soon as possible.\n\n"
+                f"Thank you again for supporting the club and being an active part of our community. "
+                f"We hope you love your merchandise!\n\n"
+                f"Warm regards,\n"
+                f"Club #{data['club_id']} Management Team"
+            )
+        )
+
+        with service_app.app_context():
+            mail.send(msg)
+        print(f"Merchandise order email sent to {data['customer_email']}.")
+
+    except Exception as e:
+        print(f"Error sending merchandise order email: {e}")
+
+def send_task_assignment_email(assignee_email, member_name, data):
+    """
+    Sends an email to notify a member about a new task assignment.
+
+    :param assignee_email: Email address of the assignee.
+    :param member_name: Name of the member being assigned the task.
+    :param club_id: Club ID.
+    :param data: Dictionary containing task details (title, description, priority, due_date).
+    """
+    try:
+        subject = f"New Task Assigned from Club #{data["club_id"]}"
+        msg = Message(
+            subject=subject,
+            sender=MAIL_USERNAME,
+            recipients=[assignee_email],
+            body=(
+                f"Hi {member_name},\n\n"
+                f"You’ve been assigned a new task by the admin of Club #{data["club_id"]}.\n\n"
+                f"Here are the details:\n\n"
+                f"Task: {data['title']}\n"
+                f"Description: {data.get('description', 'No description provided')}\n"
+                f"Priority: {data.get('priority', 'Medium')}\n"
+                f"Due Date: {data['due_date']}\n\n"
+                f"Please make sure to review the task and plan your time accordingly. "
+                f"If you have any questions or need clarification, feel free to reach out to the club admin.\n\n"
+                f"Thank you for your continued contribution to the club’s activities!\n\n"
+                f"Best regards,\n"
+                f"Club #{data["club_id"]} Management Team"
+            )
+        )
+
+        with service_app.app_context():
+            mail.send(msg)
+        print(f"Task assignment email sent to {assignee_email}.")
+    except Exception as e:
+        print(f"Error sending task assignment email: {e}")

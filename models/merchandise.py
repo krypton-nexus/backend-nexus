@@ -1,5 +1,6 @@
 from Database.connection import get_connection
 import json
+from service.emailservice import send_merch_order_email
 
 # ----------------------- Products -----------------------
 
@@ -10,7 +11,7 @@ def insert_product(data):
             cursor = connection.cursor()
             insert_query = """
                 INSERT INTO products 
-                (club_id, product_name, product_description, product_price, product_quantity, product_images) 
+                (club_id, product_name, product_description, product_price, product_quantity, product_image_link) 
                 VALUES (%s, %s, %s, %s, %s, %s)
             """
             cursor.execute(insert_query, (
@@ -19,7 +20,7 @@ def insert_product(data):
                 data['product_description'],
                 data['product_price'],
                 data['product_quantity'],
-                json.dumps(data.get('product_images', []))
+                data['product_image_link']
             ))
             connection.commit()
             return {"message": "Product inserted successfully"}
@@ -38,8 +39,8 @@ def get_all_products():
             cursor = connection.cursor(dictionary=True)
             cursor.execute("SELECT * FROM products ORDER BY created_at DESC")
             results = cursor.fetchall()
-            for product in results:
-                product['product_images'] = json.loads(product['product_images']) if product['product_images'] else []
+            # for product in results:
+            #     product['product_images'] = json.loads(product['product_images']) if product['product_images'] else []
             return results
         except Exception as e:
             return {"error": str(e)}
@@ -55,8 +56,8 @@ def get_products_by_club(club_id):
             cursor = connection.cursor(dictionary=True)
             cursor.execute("SELECT * FROM products WHERE club_id = %s", (club_id,))
             results = cursor.fetchall()
-            for product in results:
-                product['product_images'] = json.loads(product['product_images']) if product['product_images'] else []
+            # for product in results:
+            #     product['product_images'] = json.loads(product['product_images']) if product['product_images'] else []
             return results
         except Exception as e:
             return {"error": str(e)}
@@ -130,6 +131,11 @@ def create_order(data):
             )
 
             connection.commit()
+            cursor.execute("SELECT product_quantity, product_name FROM products WHERE id = %s", (data['product_id'],))
+            product_info = cursor.fetchone()
+            product_name = product_info[1] 
+            data['product_name']=product_name
+            send_merch_order_email(data,"processing")
             return {"message": "Order created successfully"}
         except Exception as e:
             connection.rollback()
