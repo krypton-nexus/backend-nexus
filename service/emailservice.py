@@ -133,36 +133,34 @@ def send_merch_order_email(data, status):
 def send_task_assignment_email(assignee_email, member_name, data):
     """
     Sends an email to notify a member about a new task assignment.
-
-    :param assignee_email: Email address of the assignee.
-    :param member_name: Name of the member being assigned the task.
-    :param club_id: Club ID.
-    :param data: Dictionary containing task details (title, description, priority, due_date).
     """
     try:
-        subject = f"New Task Assigned from Club #{data["club_id"]}"
+        print(assignee_email)
+        print(member_name)
+        print(data)
         msg = Message(
-            subject=subject,
+            subject=f"New Task Assigned from Club #{data['club_id']}",
             sender=MAIL_USERNAME,
             recipients=[assignee_email],
             body=(
                 f"Hi {member_name},\n\n"
-                f"You’ve been assigned a new task by the admin of Club #{data["club_id"]}.\n\n"
+                f"You’ve been assigned a new task by the admin of Club #{data['club_id']}.\n\n"
                 f"Here are the details:\n\n"
                 f"Task: {data['title']}\n"
-                f"Description: {data.get('description', 'No description provided')}\n"
-                f"Priority: {data.get('priority', 'Medium')}\n"
+                f"Description: {data['description']}\n"
+                f"Priority: {data['priority']}\n"
                 f"Due Date: {data['due_date']}\n\n"
                 f"Please make sure to review the task and plan your time accordingly. "
                 f"If you have any questions or need clarification, feel free to reach out to the club admin.\n\n"
                 f"Thank you for your continued contribution to the club’s activities!\n\n"
                 f"Best regards,\n"
-                f"Club #{data["club_id"]} Management Team"
+                f"Club #{data['club_id']} Management Team"
             )
         )
-
         with service_app.app_context():
             mail.send(msg)
         print(f"Task assignment email sent to {assignee_email}.")
+
     except Exception as e:
+        # You can also log this or return the error
         print(f"Error sending task assignment email: {e}")

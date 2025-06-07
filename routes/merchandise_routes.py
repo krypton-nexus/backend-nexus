@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from models.merchandise import (
     insert_product, get_all_products, get_products_by_club, update_product,
     create_order, get_all_orders, get_orders_by_club, update_order_status,
-    get_dashboard_stats
+    get_dashboard_stats,delete_product
 )
 
 
@@ -20,6 +20,17 @@ def add_product():
         if "error" in result:
             return jsonify(result), 400
         return jsonify(result), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@merchandise_bp.route('/products/<int:product_id>', methods=['DELETE'])
+def remove_product(product_id):
+    """Delete a product by ID."""
+    try:
+        result = delete_product(product_id)
+        if "error" in result:
+            return jsonify(result), 404
+        return jsonify(result), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

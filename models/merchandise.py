@@ -96,6 +96,28 @@ def update_product(product_id, data):
             cursor.close()
             connection.close()
 
+def delete_product(product_id):
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+
+            # Check if product exists
+            cursor.execute("SELECT * FROM products WHERE id = %s", (product_id,))
+            if cursor.fetchone() is None:
+                return {"error": "Product not found"}
+
+            # Delete the product
+            cursor.execute("DELETE FROM products WHERE id = %s", (product_id,))
+            connection.commit()
+            return {"message": "Product deleted successfully"}
+        except Exception as e:
+            connection.rollback()
+            return {"error": str(e)}
+        finally:
+            cursor.close()
+            connection.close()
+
 # ----------------------- Orders -----------------------
 
 def create_order(data):

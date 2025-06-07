@@ -4,7 +4,7 @@ from JWT.jwt_require import jwt_required
 club_bp = Blueprint('club', __name__)
 
 @club_bp.route('/<club_id>', methods=['GET'])
-@jwt_required
+# @jwt_required
 def get_club(club_id):
     """
     Endpoint to retrieve a club by its ID.
@@ -19,7 +19,7 @@ def get_club(club_id):
 
 
 @club_bp.route('/list', methods=['GET'])
-@jwt_required
+# @jwt_required
 def list_clubs():
     """
     Endpoint to retrieve a list of all clubs.
@@ -35,8 +35,8 @@ def list_clubs():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@club_bp.route('/', methods=['POST'])
-@jwt_required
+@club_bp.route('/create', methods=['POST'])
+# @jwt_required
 def create_club():
     """
     Endpoint to create a new club.

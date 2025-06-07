@@ -7,7 +7,7 @@ event_bp = Blueprint('event', __name__)
 
 
 @event_bp.route('/get_events', methods=['GET'])
-@jwt_required
+# @jwt_required
 def get_events_by_club():
     """
     Endpoint to retrieve all events for a specific club by club ID.
@@ -32,7 +32,7 @@ def get_events_by_club():
 
 
 @event_bp.route('/create', methods=['POST'])
-@jwt_required
+# @jwt_required
 def create_event():
     """
     Endpoint to create a new event for a specific club.
@@ -73,7 +73,7 @@ def create_event():
 
 
 @event_bp.route('/add_participant', methods=['POST'])
-@jwt_required
+# @jwt_required
 def add_event_participant():
     """
     Endpoint to add a participant to an event.
@@ -146,7 +146,7 @@ def delete_participant():
 
 
 @event_bp.route('/delete', methods=['DELETE'])
-@jwt_required
+# @jwt_required
 def delete_event():
     """
     Endpoint to delete an event by club ID and event ID.
@@ -181,7 +181,7 @@ def delete_event():
         return jsonify({"error": str(e)}), 500
 
 @event_bp.route('/get_participant_count', methods=['POST'])
-@jwt_required
+# @jwt_required
 def get_participant_count_route():
     """
     Endpoint to get the participant count for an event.
@@ -214,7 +214,7 @@ def get_participant_count_route():
         return jsonify({"error": str(e)}), 500  # Internal server error
 
 @event_bp.route('/update', methods=['POST'])
-# @jwt_required
+@jwt_required
 def edit_event_route():
     """
     Endpoint to edit an existing event based on event_id.
@@ -297,7 +297,7 @@ def add_meeting_note():
         connection.close()
 
 @event_bp.route('get_meeting_note/<int:event_id>', methods=['GET'])
-@jwt_required
+# @jwt_required
 def get_meeting_note(event_id):
     """
     Endpoint to fetch the meeting note for a specific event.

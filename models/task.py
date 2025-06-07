@@ -39,16 +39,16 @@ def create_task(data):
             cursor.execute("""
     SELECT s.email, CONCAT(s.first_name, ' ', s.last_name) AS member_name
     FROM membership cm
-    JOIN students s ON cm.student_id = s.email
+    JOIN student s ON cm.student_id = s.email
     WHERE cm.id = %s
 """, (data['assignee_id'],))
-
+       
             assignee = cursor.fetchone()
-            if not assignee:
-                return {"error": "Assignee not found"}
-
-            assignee_email = assignee[0]
-            member_name = assignee[1]
+            print(assignee)
+            assignee_email = assignee['email']
+            member_name = assignee['member_name']
+            print(assignee_email)
+            print(member_name)
             send_task_assignment_email(assignee_email,member_name,data)
             # Return the created task
             return {

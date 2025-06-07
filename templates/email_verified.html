@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Email Verified</title>
+    <style>
+      body {
+        background: #f0f2f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .message-box {
+        background: #ffffff;
+        padding: 50px 40px;
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 520px;
+        animation: fadeIn 0.6s ease;
+      }
+
+      .email-icon {
+        width: 140px;
+        height: auto;
+        margin-bottom: 20px;
+      }
+
+      h2 {
+        font-size: 24px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 25px;
+      }
+
+      .message-box a {
+        background-color: #aa1c3e;
+        color: #fff;
+        text-decoration: none;
+        padding: 14px 28px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 15px;
+        display: inline-block;
+        transition: background 0.3s ease, transform 0.2s ease;
+      }
+
+      .message-box a:hover {
+        background-color: #880d2e;
+        transform: scale(1.05);
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="message-box">
+      <!-- SVG Icon -->
+      <svg
+        class="email-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 64 64"
+        fill="none">
+        <rect width="64" height="64" rx="12" />
+        <path
+          d="M12 20h40v24H12V20z"
+          fill="#fff"
+          stroke="#000"
+          stroke-width="2" />
+        <path
+          d="M12 20l20 16L52 20"
+          fill="none"
+          stroke="#000"
+          stroke-width="2" />
+        <path
+          d="M24 32l6 6 10-12"
+          stroke="#6B46C1"
+          stroke-width="3"
+          fill="none" />
+      </svg>
+
+      <h2>Your email is successfully verified.</h2>
+      <a href="http://localhost:3000/login">Click Here to access Nexus</a>
+    </div>
+  </body>
+</html>
