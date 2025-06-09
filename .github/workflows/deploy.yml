@@ -20,9 +20,4 @@ jobs:
 
       - name: Deploy Flask app to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@13.247.207.132 << 'EOF'
-            cd "/home/ubuntu/Llama/Nexus/Backend/backend-nexus"
-            git pull origin keerthan_se/2019/040
-            source venv/bin/activate
-            sudo supervisorctl restart flask_app
-          EOF
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@13.247.207.132 "cd /home/ubuntu/Llama/Nexus/Backend/backend-nexus && git pull origin keerthan_se/2019/040 && source venv/bin/activate && sudo supervisorctl restart flask_app"
