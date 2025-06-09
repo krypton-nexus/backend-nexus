@@ -164,3 +164,31 @@ def send_task_assignment_email(assignee_email, member_name, data):
     except Exception as e:
         # You can also log this or return the error
         print(f"Error sending task assignment email: {e}")
+
+def send_membership_update_to_user(student_email, status):
+    """
+    Sends an email to notify the student about their updated membership status.
+
+    :param student_email: Email address of the student.
+    :param status: The updated status of the membership request.
+    """
+    try:
+        msg = Message(
+            subject="Membership Status Update",
+            sender=MAIL_USERNAME,
+            recipients=[student_email],
+            body=(
+                f"Hi User,\n\n"
+                f"An update has been made regarding your club membership request.\n"
+                f"The admin has responded, and your current membership status is: **{status}**.\n\n"
+                f"Warm regards,\n"
+                f"Club Management Team"
+            )
+        )
+
+        with service_app.app_context():
+            mail.send(msg)
+        print(f"Membership update email sent to {student_email}.")
+
+    except Exception as e:
+        print(f"Error sending membership update email: {e}")

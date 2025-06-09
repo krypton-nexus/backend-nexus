@@ -2,6 +2,7 @@ from Database.connection import get_connection
 from models.admin import list_admins_by_club_id
 from service.emailservice import send_admin_notification
 from models.notification_admin import  insert_notification
+from service.emailservice import send_membership_update_to_user
 def add_membership(student_email, club_id):
     """
     Adds a new membership for a student to a club, setting the default status to 'pending' for the first time.
@@ -116,6 +117,7 @@ def update_membership_status(student_email, club_id, status):
 
             if cursor.rowcount > 0:
                 return {"message": f"Membership status updated to '{status}'."}
+                send_membership_update_to_user(student_email, status)
             else:
                 return {"message": "Failed to update the membership status."}
         
