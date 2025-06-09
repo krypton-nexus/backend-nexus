@@ -3,17 +3,17 @@ name: Deploy Flask App to EC2
 on:
   push:
     branches:
-      - keerthan_se/2019/040
+      - keerthan_se/2019/040  # Change if your branch is different
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Setup SSH key
+      - name: Set up SSH Key
         run: |
           echo "${{ secrets.EC2_SSH_KEY }}" > private_key.pem
           chmod 600 private_key.pem
