@@ -3,7 +3,7 @@ name: Deploy Flask App to EC2
 on:
   push:
     branches:
-      - main
+      - keerthan_se/2019/040
 
 jobs:
   deploy:
