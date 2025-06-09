@@ -1,0 +1,28 @@
+name: Deploy Flask App to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup SSH key
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+
+      - name: Deploy Flask app to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@13.247.207.132 << 'EOF'
+            cd "/home/ubuntu/Llama/Nexus/Backend/backend-nexus"
+            git pull origin keerthan_se/2019/040
+            source venv/bin/activate
+            sudo supervisorctl restart flask_app
+          EOF
