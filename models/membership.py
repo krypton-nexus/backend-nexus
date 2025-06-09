@@ -116,8 +116,9 @@ def update_membership_status(student_email, club_id, status):
             connection.commit()
 
             if cursor.rowcount > 0:
-                return {"message": f"Membership status updated to '{status}'."}
                 send_membership_update_to_user(student_email, status)
+                return {"message": f"Membership status updated to '{status}'."}
+                
             else:
                 return {"message": "Failed to update the membership status."}
         
