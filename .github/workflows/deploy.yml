@@ -15,9 +15,14 @@ jobs:
 
       - name: Set up SSH Key
         run: |
-          echo "${{ secrets.EC2_SSH_KEY }}" > private_key.pem
+          echo "${{ secrets.EC2_BACKEND_SSH_KEY }}" > private_key.pem
           chmod 600 private_key.pem
 
       - name: Deploy Flask app to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@13.247.207.132 "cd /home/ubuntu/Llama/Nexus/Backend/backend-nexus && git pull origin keerthan_se/2019/040 && source venv/bin/activate && sudo supervisorctl restart flask_app"
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@13.247.207.132 "
+            cd /home/ubuntu/Llama/Nexus/Backend/backend-nexus &&
+            git pull origin keerthan_se/2019/040 &&
+            source venv/bin/activate &&
+            sudo supervisorctl restart flask_app
+          "
