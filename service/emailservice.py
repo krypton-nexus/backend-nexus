@@ -4,8 +4,8 @@ from itsdangerous import URLSafeTimedSerializer
 
 # Hardcoded configuration
 SECRET_KEY = "a3c4b8f7e9d2a10d8b4f4e5c6b7d1c2a7f9e3b6a4d8c5e7f9a3d4b6e8c7a2d1"
-MAIL_USERNAME = "thavamkajan0901@gmail.com"  # Replace with your email
-MAIL_PASSWORD = "fmnp ktwg okjk dvoy"  # Replace with your email password
+MAIL_USERNAME = "nexus.club.management@gmail.com"  # Replace with your email
+MAIL_PASSWORD = "isfb jukb eiud jxkb"  # Replace with your email password
 
 
 # Create a local Flask app instance for email service
