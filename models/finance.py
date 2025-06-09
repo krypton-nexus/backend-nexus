@@ -151,3 +151,42 @@ def delete_transaction(transaction_id, club_id):
         finally:
             cursor.close()
             connection.close()
+def get_categories_by_club_id(club_id):
+    """
+    Fetches all categories for a given club_id, including the transaction type name (Income/Expense).
+
+    Parameters:
+    - club_id: ID of the club whose categories are to be retrieved
+
+    Returns:
+    - A list of dictionaries with category_name and transaction_type_name
+    """
+    connection = get_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+            query = """
+            SELECT c.category_name, tt.type_name
+            FROM category c
+            JOIN transaction_type tt ON c.transaction_type_id = tt.transaction_type_id
+            WHERE c.club_id = %s
+            ORDER BY tt.type_name, c.category_name;
+            """
+            cursor.execute(query, (club_id,))
+            categories = cursor.fetchall()
+
+            category_list = []
+            for category_name, type_name in categories:
+                category_list.append({
+                    "Category Name": category_name,
+                    "Transaction Type": type_name
+                })
+            return category_list
+
+        except Exception as e:
+            print(f"Error fetching categories for club_id {club_id}: {e}")
+            return []
+
+        finally:
+            cursor.close()
+            connection.close()

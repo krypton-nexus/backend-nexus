@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models.finance import delete_transaction, get_transactions_by_club_id,insert_transaction_by_club_id,insert_category
+from models.finance import delete_transaction, get_transactions_by_club_id,insert_transaction_by_club_id,insert_category,get_categories_by_club_id
 from JWT.jwt_require import jwt_required
 finance_bp = Blueprint('finance', __name__)
 
@@ -124,3 +124,24 @@ def delete_transaction_endpoint():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500  # Internal Server Error if something goes wrong
+@finance_bp.route('/get_categories', methods=['GET'])
+def get_categories_by_club():
+    """
+    Endpoint to retrieve all categories for a specific club, including transaction type name.
+    """
+    try:
+        club_id = request.args.get('club_id')  # Extract the club_id from query parameters
+
+        if not club_id:
+            return jsonify({"error": "club_id is required"}), 400
+
+        # Call the function to get categories with transaction type
+        categories = get_categories_by_club_id(club_id)
+
+        if not categories:
+            return jsonify({"message": "No categories found for the specified club ID."}), 404
+        else:
+            return jsonify({"categories": categories}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
