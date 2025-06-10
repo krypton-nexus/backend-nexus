@@ -20,8 +20,14 @@ def insert_club(data):
             if club_id_exists > 0:
                 return {"error": "Club ID already exists."}
 
-            # Serialize the image URLs into a JSON string
-            images_url_json = json.dumps(data['images_url'])
+                    # Safely get the first image from the array
+            first_image_url = data['images_url'][0] if data['images_url'] else None
+
+            # Prepare the image dictionary
+            image_data = {'logo': first_image_url}
+
+            # Convert to JSON string
+            images_url_json = json.dumps(image_data)
 
             # SQL query to insert club data
             insert_query = """
